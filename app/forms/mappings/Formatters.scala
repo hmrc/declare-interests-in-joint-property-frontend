@@ -18,7 +18,7 @@ package forms.mappings
 
 import play.api.data.FormError
 import play.api.data.format.Formatter
-import models.Enumerable
+import models.{Enumerable, Utr}
 
 import scala.util.control.Exception.nonFatalCatch
 
@@ -78,7 +78,6 @@ trait Formatters {
         baseFormatter.unbind(key, value.toString)
     }
 
-
   private[mappings] def enumerableFormatter[A](requiredKey: String, invalidKey: String, args: Seq[String] = Seq.empty)(implicit ev: Enumerable[A]): Formatter[A] =
     new Formatter[A] {
 
@@ -94,5 +93,24 @@ trait Formatters {
 
       override def unbind(key: String, value: A): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
+    }
+
+  private[mappings] def utrFormatter(requiredKey: String, invalidKey: String, args: Seq[String] = Seq.empty): Formatter[Utr] =
+    new Formatter[Utr] {
+
+      private val baseFormatter = stringFormatter(requiredKey, args)
+
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Utr] =
+        baseFormatter
+          .bind(key, data)
+          .right.flatMap {
+            value =>
+              Utr.fromString(value)
+                .map(Right(_))
+                .getOrElse(Left(Seq(FormError(key, invalidKey, args))))
+        }
+
+      override def unbind(key: String, value: Utr): Map[String, String] =
+        Map(key -> value.toString)
     }
 }
