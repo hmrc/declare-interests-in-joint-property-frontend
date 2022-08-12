@@ -32,11 +32,18 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        <h1 class="govuk-heading-xl">@messages("applicantHasUtr.heading")</h1>
+
+        <p class="govuk-body">
+            @messages("applicantHasUtr.guidance")
+            <a href="@messages("applicantHasUtr.guidance.link.href")" class="govuk-link">@messages("applicantHasUtr.guidance.link.text")</a>.
+        </p>
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("applicantHasUtr.heading")).asPageHeading()
-            )
+                legend = LegendViewModel(messages("applicantHasUtr.heading")).withCssClass("govuk-visually-hidden")
+            ).withHint(HintViewModel(messages("applicantHasUtr.hint")))
         )
 
         @govukButton(

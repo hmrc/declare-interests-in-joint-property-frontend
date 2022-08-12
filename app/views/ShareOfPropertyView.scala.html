@@ -40,7 +40,8 @@
                 label = LabelViewModel(messages("shareOfProperty.heading")).asPageHeading()
             )
             .asNumeric()
-            .withWidth(Fixed10)
+            .withWidth(Fixed3)
+            .withSuffix(PrefixOrSuffix(content = "%"))
         )
 
         @govukButton(

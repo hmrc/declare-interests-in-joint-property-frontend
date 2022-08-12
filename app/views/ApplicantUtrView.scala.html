@@ -34,12 +34,20 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        <h1 class="govuk-heading-xl">@messages("applicantUtr.heading")</h1>
+
+        <p class="govuk-body">
+            @messages("applicantUtr.guidance")
+            <a href="@messages("applicantUtr.guidance.link.href")" class="govuk-link">@messages("applicantUtr.guidance.link.text")</a>.
+        </p>
+
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("applicantUtr.heading")).asPageHeading()
+                label = LabelViewModel(messages("applicantUtr.heading")).withCssClass("govuk-visually-hidden")
             )
-            .withWidth(Full)
+            .withWidth(Fixed10)
+            .withHint(HintViewModel(messages("applicantUtr.hint")))
         )
 
         @govukButton(
