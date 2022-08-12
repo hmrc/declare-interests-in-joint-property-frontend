@@ -32,7 +32,7 @@ object PropertyAddressSummary  {
     answers.get(PropertyAddressPage).map {
       answer =>
 
-      val value = HtmlFormat.escape(answer.line1).toString + "<br/>" + HtmlFormat.escape(answer.line2).toString
+        val value = answer.lines.map(HtmlFormat.escape).mkString("<br/>")
 
         SummaryListRowViewModel(
           key     = "propertyAddress.checkYourAnswersLabel",

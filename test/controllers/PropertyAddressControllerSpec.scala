@@ -18,14 +18,13 @@ package controllers
 
 import base.SpecBase
 import forms.PropertyAddressFormProvider
-import models.{NormalMode, PropertyAddress, UserAnswers}
+import models.{Address, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.PropertyAddressPage
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -42,16 +41,9 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   lazy val propertyAddressRoute = routes.PropertyAddressController.onPageLoad(NormalMode).url
+  private val validAnswer = Address("line1", None, "town", None, "postcode")
 
-  val userAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      PropertyAddressPage.toString -> Json.obj(
-        "line1" -> "value 1",
-        "line2" -> "value 2"
-      )
-    )
-  )
+  val userAnswers = emptyUserAnswers.set(PropertyAddressPage, validAnswer).success.value
 
   "PropertyAddress Controller" - {
 
@@ -83,7 +75,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(PropertyAddress("value 1", "value 2")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -104,7 +96,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, propertyAddressRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+            .withFormUrlEncodedBody(("line1", "line 1"), ("townOrCity", "town"), ("postcode", "postcode"))
 
         val result = route(application, request).value
 
@@ -154,7 +146,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, propertyAddressRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+            .withFormUrlEncodedBody(("line1", "line 1"), ("townOrCity", "town"), ("postcode", "postcode"))
 
         val result = route(application, request).value
 

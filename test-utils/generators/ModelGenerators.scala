@@ -41,35 +41,22 @@ trait ModelGenerators {
     } yield Nino(firstChar ++ secondChar ++ digits :+ lastChar)
   }
 
-  implicit lazy val arbitraryPropertyAddress: Arbitrary[PropertyAddress] =
+  implicit lazy val arbitraryAddress: Arbitrary[Address] =
     Arbitrary {
       for {
         line1 <- arbitrary[String]
-        line2 <- arbitrary[String]
-      } yield PropertyAddress(line1, line2)
+        line2 <- Gen.option(arbitrary[String])
+        town <- arbitrary[String]
+        county <- Gen.option(arbitrary[String])
+        postcode <- arbitrary[String]
+      } yield Address(line1, line2, town, county, postcode)
     }
 
-  implicit lazy val arbitraryPartnerName: Arbitrary[PartnerName] =
+  implicit lazy val arbitraryName: Arbitrary[Name] =
     Arbitrary {
       for {
         firstName <- arbitrary[String]
         lastName <- arbitrary[String]
-      } yield PartnerName(firstName, lastName)
-    }
-
-  implicit lazy val arbitraryCurrentAddress: Arbitrary[CurrentAddress] =
-    Arbitrary {
-      for {
-        line1 <- arbitrary[String]
-        line2 <- arbitrary[String]
-      } yield CurrentAddress(line1, line2)
-    }
-
-  implicit lazy val arbitraryApplicantName: Arbitrary[ApplicantName] =
-    Arbitrary {
-      for {
-        firstName <- arbitrary[String]
-        lastName <- arbitrary[String]
-      } yield ApplicantName(firstName, lastName)
+      } yield Name(firstName, lastName)
     }
 }

@@ -34,14 +34,13 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        <h1 class="govuk-heading-xl">@messages("propertyAddress.heading")</h1>
-
         @govukInput(
             InputViewModel(
                 field = form("line1"),
                 label = LabelViewModel(messages("propertyAddress.line1"))
             )
             .withWidth(Full)
+            .withAutocomplete("address-line1")
         )
 
         @govukInput(
@@ -50,6 +49,33 @@
                 label = LabelViewModel(messages("propertyAddress.line2"))
             )
             .withWidth(Full)
+            .withAutocomplete("address-line2")
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("townOrCity"),
+                label = LabelViewModel(messages("propertyAddress.townOrCity"))
+            )
+            .withWidth(Full)
+            .withAutocomplete("address-level2")
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("county"),
+                label = LabelViewModel(messages("propertyAddress.county"))
+            )
+            .withWidth(TwoThirds)
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("postcode"),
+                label = LabelViewModel(messages("propertyAddress.postcode"))
+            )
+            .withWidth(Fixed10)
+            .withAutocomplete("postal-code")
         )
 
         @govukButton(

@@ -16,17 +16,17 @@
 
 package pages
 
-import models.PartnerName
+import models.Name
 import pages.behaviours.PageBehaviours
 
 class PartnerNamePageSpec extends PageBehaviours {
 
   "PartnerNamePage" - {
 
-    beRetrievable[PartnerName](PartnerNamePage)
+    beRetrievable[Name](PartnerNamePage)
 
-    beSettable[PartnerName](PartnerNamePage)
+    beSettable[Name](PartnerNamePage)
 
-    beRemovable[PartnerName](PartnerNamePage)
+    beRemovable[Name](PartnerNamePage)
   }
 }
