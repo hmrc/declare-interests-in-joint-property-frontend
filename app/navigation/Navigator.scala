@@ -51,8 +51,34 @@ class Navigator @Inject()() {
     }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
 
   private val checkRouteMap: Page => UserAnswers => Call = {
-    case _ => _ => routes.CheckYourAnswersController.onPageLoad
+    case ApplicantHasUtrPage => applicantHasUtrCheckRoute
+    case PartnerHasUtrPage   => partnerHasUtrCheckRoute
+    case _                   => _ => routes.CheckYourAnswersController.onPageLoad
   }
+
+  private def applicantHasUtrCheckRoute(answers: UserAnswers): Call = {
+    answers.get(ApplicantHasUtrPage).map {
+      case true =>
+        answers.get(ApplicantUtrPage)
+          .map(_ => routes.CheckYourAnswersController.onPageLoad)
+          .getOrElse(routes.ApplicantUtrController.onPageLoad(CheckMode))
+
+      case false =>
+        routes.CheckYourAnswersController.onPageLoad
+    }
+  }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
+
+  private def partnerHasUtrCheckRoute(answers: UserAnswers): Call = {
+    answers.get(PartnerHasUtrPage).map {
+      case true =>
+        answers.get(PartnerUtrPage)
+          .map(_ => routes.CheckYourAnswersController.onPageLoad)
+          .getOrElse(routes.PartnerUtrController.onPageLoad(CheckMode))
+
+      case false =>
+        routes.CheckYourAnswersController.onPageLoad
+    }
+  }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>

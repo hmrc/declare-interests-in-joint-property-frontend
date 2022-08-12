@@ -97,6 +97,85 @@ class NavigatorSpec extends SpecBase {
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad
       }
+
+      "must go from Applicant Name to Check Answers" in {
+
+        navigator.nextPage(ApplicantNamePage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Applicant Nino to Check Answers" in {
+
+        navigator.nextPage(ApplicantNinoPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Applicant Has UTR to Check Answers when the answer is yes and Applicant UTR is already answered" in {
+
+        val answers =
+          emptyUserAnswers
+            .set(ApplicantUtrPage, Utr.fromString("1234567890").value).success.value
+            .set(ApplicantHasUtrPage, true).success.value
+
+        navigator.nextPage(ApplicantHasUtrPage, CheckMode, answers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Applicant Has UTR to Applicant UTR when the answer is yes and Applicant UTR is not already answered" in {
+
+        val answers = emptyUserAnswers.set(ApplicantHasUtrPage, true).success.value
+        navigator.nextPage(ApplicantHasUtrPage, CheckMode, answers) mustBe routes.ApplicantUtrController.onPageLoad(CheckMode)
+      }
+
+      "must go from Applicant Has UTR to Check Answers when the answer is no" in {
+
+        val answers = emptyUserAnswers.set(ApplicantHasUtrPage, false).success.value
+        navigator.nextPage(ApplicantHasUtrPage, CheckMode, answers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Applicant UTR to Check Answers" in {
+
+        navigator.nextPage(ApplicantUtrPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+      
+      "must go from Partner Name to Check Answers" in {
+
+        navigator.nextPage(PartnerNamePage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Partner Nino to Check Answers" in {
+
+        navigator.nextPage(PartnerNinoPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Partner Has UTR to Check Answers when the answer is yes and Partner UTR is already answered" in {
+
+        val answers =
+          emptyUserAnswers
+            .set(PartnerUtrPage, Utr.fromString("1234567890").value).success.value
+            .set(PartnerHasUtrPage, true).success.value
+
+        navigator.nextPage(PartnerHasUtrPage, CheckMode, answers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Partner Has UTR to Partner UTR when the answer is yes and Partner UTR is not already answered" in {
+
+        val answers = emptyUserAnswers.set(PartnerHasUtrPage, true).success.value
+        navigator.nextPage(PartnerHasUtrPage, CheckMode, answers) mustBe routes.PartnerUtrController.onPageLoad(CheckMode)
+      }
+
+      "must go from Partner Has UTR to Check Answers when the answer is no" in {
+
+        val answers = emptyUserAnswers.set(PartnerHasUtrPage, false).success.value
+        navigator.nextPage(PartnerHasUtrPage, CheckMode, answers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Partner UTR to Check Answers" in {
+
+        navigator.nextPage(PartnerUtrPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Current Address to Check Answers" in {
+
+        navigator.nextPage(CurrentAddressPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
     }
   }
 }
