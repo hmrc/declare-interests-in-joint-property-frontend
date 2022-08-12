@@ -105,7 +105,7 @@ trait Formatters {
           .bind(key, data)
           .right.flatMap {
             value =>
-              Utr.fromString(value)
+              Utr.fromString(value.replaceAll("\\s", ""))
                 .map(Right(_))
                 .getOrElse(Left(Seq(FormError(key, invalidKey, args))))
         }
