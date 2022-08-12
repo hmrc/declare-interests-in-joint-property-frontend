@@ -17,10 +17,9 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
-import models.Enumerable
+import models.{Enumerable, Utr}
 
 trait Mappings extends Formatters with Constraints {
 
@@ -51,4 +50,7 @@ trait Mappings extends Formatters with Constraints {
                            requiredKey: String,
                            args: Seq[String] = Seq.empty): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
+
+  protected def utr(requiredKey: String, invalidKey: String, args: Seq[String] = Nil): FieldMapping[Utr] =
+    of(utrFormatter(requiredKey, invalidKey, args))
 }

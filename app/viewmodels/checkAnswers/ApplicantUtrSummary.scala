@@ -33,7 +33,7 @@ object ApplicantUtrSummary  {
 
         SummaryListRowViewModel(
           key     = "applicantUtr.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer).toString),
+          value   = ValueViewModel(HtmlFormat.escape(answer.value).toString),
           actions = Seq(
             ActionItemViewModel("site.change", routes.ApplicantUtrController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText(messages("applicantUtr.change.hidden"))

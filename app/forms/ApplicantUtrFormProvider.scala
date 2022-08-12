@@ -17,15 +17,14 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
+import models.Utr
 import play.api.data.Form
 
 class ApplicantUtrFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(): Form[Utr] =
     Form(
-      "value" -> text("applicantUtr.error.required")
-        .verifying(maxLength(100, "applicantUtr.error.length"))
+      "value" -> utr("applicantUtr.error.required", "applicantUtr.error.invalid")
     )
 }

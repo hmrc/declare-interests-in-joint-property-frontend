@@ -20,7 +20,7 @@ import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.data.{Form, FormError}
-import models.Enumerable
+import models.{Enumerable, Utr}
 
 object MappingsSpec {
 
@@ -165,6 +165,38 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
     "must not bind an empty map" in {
       val result = testForm.bind(Map.empty[String, String])
       result.errors must contain(FormError("value", "error.required"))
+    }
+  }
+
+  "utr" - {
+
+    val testForm = Form(
+      "value" -> utr("required", "invalid")
+    )
+
+    "must bind a valid UTR" in {
+      val result = testForm.bind(Map("value" -> "1234567890"))
+      result.get mustEqual Utr.fromString("1234567890").value
+    }
+
+    "must bind a valid UTR containing spaces" in {
+      val result = testForm.bind(Map("value" -> " k 1 2 3 4 5 6 7 8 9   0 "))
+      result.get mustEqual Utr.fromString("k1234567890").value
+    }
+
+    "must not bind an invalid value" in {
+      val result = testForm.bind(Map("value" -> "invalid"))
+      result.errors must contain(FormError("value", "invalid"))
+    }
+
+    "must not bind an empty map" in {
+      val result = testForm.bind(Map.empty[String, String])
+      result.errors must contain(FormError("value", "required"))
+    }
+
+    "must not bind an empty value" in {
+      val result = testForm.bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "required"))
     }
   }
 }

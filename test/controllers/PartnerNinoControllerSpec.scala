@@ -18,10 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.PartnerNinoFormProvider
+import generators.ModelGenerators
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.mockito.MockitoSugar
 import pages.PartnerNinoPage
 import play.api.inject.bind
@@ -29,16 +31,18 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import uk.gov.hmrc.domain.Nino
 import views.html.PartnerNinoView
 
 import scala.concurrent.Future
 
-class PartnerNinoControllerSpec extends SpecBase with MockitoSugar {
+class PartnerNinoControllerSpec extends SpecBase with MockitoSugar with ModelGenerators {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new PartnerNinoFormProvider()
   val form = formProvider()
+  private val validAnswer = arbitrary[Nino].sample.value
 
   lazy val partnerNinoRoute = routes.PartnerNinoController.onPageLoad(NormalMode).url
 
@@ -62,7 +66,7 @@ class PartnerNinoControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerNinoPage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerNinoPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,7 +78,7 @@ class PartnerNinoControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -95,7 +99,7 @@ class PartnerNinoControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, partnerNinoRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", validAnswer.value))
 
         val result = route(application, request).value
 
@@ -145,7 +149,7 @@ class PartnerNinoControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, partnerNinoRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", validAnswer.value))
 
         val result = route(application, request).value
 

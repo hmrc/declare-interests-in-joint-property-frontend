@@ -33,7 +33,7 @@ object PartnerUtrSummary  {
 
         SummaryListRowViewModel(
           key     = "partnerUtr.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer).toString),
+          value   = ValueViewModel(HtmlFormat.escape(answer.value).toString),
           actions = Seq(
             ActionItemViewModel("site.change", routes.PartnerUtrController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText(messages("partnerUtr.change.hidden"))
