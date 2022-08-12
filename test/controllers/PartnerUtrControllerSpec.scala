@@ -18,10 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.PartnerUtrFormProvider
-import models.{NormalMode, UserAnswers}
+import generators.ModelGenerators
+import models.{NormalMode, UserAnswers, Utr}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.mockito.MockitoSugar
 import pages.PartnerUtrPage
 import play.api.inject.bind
@@ -33,12 +35,13 @@ import views.html.PartnerUtrView
 
 import scala.concurrent.Future
 
-class PartnerUtrControllerSpec extends SpecBase with MockitoSugar {
+class PartnerUtrControllerSpec extends SpecBase with MockitoSugar with ModelGenerators {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new PartnerUtrFormProvider()
   val form = formProvider()
+  val validAnswer = arbitrary[Utr].sample.value
 
   lazy val partnerUtrRoute = routes.PartnerUtrController.onPageLoad(NormalMode).url
 
@@ -62,7 +65,7 @@ class PartnerUtrControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerUtrPage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerUtrPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,7 +77,7 @@ class PartnerUtrControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -95,7 +98,7 @@ class PartnerUtrControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, partnerUtrRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", validAnswer.toString))
 
         val result = route(application, request).value
 
@@ -145,7 +148,7 @@ class PartnerUtrControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, partnerUtrRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", validAnswer.toString))
 
         val result = route(application, request).value
 

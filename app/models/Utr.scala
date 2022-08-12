@@ -20,7 +20,9 @@ import play.api.libs.json._
 
 import scala.util.matching.Regex
 
-final case class Utr private(value: String)
+final case class Utr private(value: String) {
+  override def toString: String = value
+}
 
 object Utr {
 

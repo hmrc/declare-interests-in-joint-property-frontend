@@ -17,13 +17,13 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import models.Utr
+import org.scalacheck.Arbitrary.arbitrary
 import play.api.data.FormError
 
 class ApplicantUtrFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "applicantUtr.error.required"
-  val lengthKey = "applicantUtr.error.length"
-  val maxLength = 100
 
   val form = new ApplicantUtrFormProvider()()
 
@@ -34,14 +34,7 @@ class ApplicantUtrFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      arbitrary[Utr].map(_.value)
     )
 
     behave like mandatoryField(

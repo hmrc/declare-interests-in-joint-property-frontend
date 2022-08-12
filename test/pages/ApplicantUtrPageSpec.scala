@@ -16,6 +16,7 @@
 
 package pages
 
+import models.Utr
 import pages.behaviours.PageBehaviours
 
 
@@ -23,10 +24,10 @@ class ApplicantUtrPageSpec extends PageBehaviours {
 
   "ApplicantUtrPage" - {
 
-    beRetrievable[String](ApplicantUtrPage)
+    beRetrievable[Utr](ApplicantUtrPage)
 
-    beSettable[String](ApplicantUtrPage)
+    beSettable[Utr](ApplicantUtrPage)
 
-    beRemovable[String](ApplicantUtrPage)
+    beRemovable[Utr](ApplicantUtrPage)
   }
 }
