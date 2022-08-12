@@ -19,3 +19,68 @@ GET         /account/sign-out                            controllers.auth.AuthCo
 GET         /account/signed-out                          controllers.auth.SignedOutController.onPageLoad
 
 GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad
+
+GET        /addProperty                        controllers.AddPropertyController.onPageLoad(mode: Mode = NormalMode)
+POST       /addProperty                        controllers.AddPropertyController.onSubmit(mode: Mode = NormalMode)
+GET        /changeAddProperty                  controllers.AddPropertyController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeAddProperty                  controllers.AddPropertyController.onSubmit(mode: Mode = CheckMode)
+
+GET        /applicantHasUtr                        controllers.ApplicantHasUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /applicantHasUtr                        controllers.ApplicantHasUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /changeApplicantHasUtr                  controllers.ApplicantHasUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeApplicantHasUtr                  controllers.ApplicantHasUtrController.onSubmit(mode: Mode = CheckMode)
+
+GET        /applicantName                        controllers.ApplicantNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /applicantName                        controllers.ApplicantNameController.onSubmit(mode: Mode = NormalMode)
+GET        /changeApplicantName                  controllers.ApplicantNameController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeApplicantName                  controllers.ApplicantNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /applicantNino                        controllers.ApplicantNinoController.onPageLoad(mode: Mode = NormalMode)
+POST       /applicantNino                        controllers.ApplicantNinoController.onSubmit(mode: Mode = NormalMode)
+GET        /changeApplicantNino                  controllers.ApplicantNinoController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeApplicantNino                  controllers.ApplicantNinoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /applicantUtr                        controllers.ApplicantUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /applicantUtr                        controllers.ApplicantUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /changeApplicantUtr                  controllers.ApplicantUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeApplicantUtr                  controllers.ApplicantUtrController.onSubmit(mode: Mode = CheckMode)
+
+GET        /currentAddress                        controllers.CurrentAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /currentAddress                        controllers.CurrentAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCurrentAddress                  controllers.CurrentAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCurrentAddress                  controllers.CurrentAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /partnerHasUtr                        controllers.PartnerHasUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /partnerHasUtr                        controllers.PartnerHasUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /changePartnerHasUtr                  controllers.PartnerHasUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePartnerHasUtr                  controllers.PartnerHasUtrController.onSubmit(mode: Mode = CheckMode)
+
+GET        /partnerName                        controllers.PartnerNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /partnerName                        controllers.PartnerNameController.onSubmit(mode: Mode = NormalMode)
+GET        /changePartnerName                  controllers.PartnerNameController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePartnerName                  controllers.PartnerNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /partnerNino                        controllers.PartnerNinoController.onPageLoad(mode: Mode = NormalMode)
+POST       /partnerNino                        controllers.PartnerNinoController.onSubmit(mode: Mode = NormalMode)
+GET        /changePartnerNino                  controllers.PartnerNinoController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePartnerNino                  controllers.PartnerNinoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /partnerUtr                        controllers.PartnerUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /partnerUtr                        controllers.PartnerUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /changePartnerUtr                  controllers.PartnerUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePartnerUtr                  controllers.PartnerUtrController.onSubmit(mode: Mode = CheckMode)
+
+GET        /propertyAddress                        controllers.PropertyAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /propertyAddress                        controllers.PropertyAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /changePropertyAddress                  controllers.PropertyAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePropertyAddress                  controllers.PropertyAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /shareOfProperty                  controllers.ShareOfPropertyController.onPageLoad(mode: Mode = NormalMode)
+POST       /shareOfProperty                  controllers.ShareOfPropertyController.onSubmit(mode: Mode = NormalMode)
+GET        /changeShareOfProperty                        controllers.ShareOfPropertyController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeShareOfProperty                        controllers.ShareOfPropertyController.onSubmit(mode: Mode = CheckMode)
+
+GET        /removeProperty                        controllers.RemovePropertyController.onPageLoad(mode: Mode = NormalMode)
+POST       /removeProperty                        controllers.RemovePropertyController.onSubmit(mode: Mode = NormalMode)
+GET        /changeRemoveProperty                  controllers.RemovePropertyController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeRemoveProperty                  controllers.RemovePropertyController.onSubmit(mode: Mode = CheckMode)

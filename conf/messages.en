@@ -55,3 +55,112 @@ signedOut.guidance = We did not save your answers.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+addProperty.title = addProperty
+addProperty.heading = addProperty
+addProperty.checkYourAnswersLabel = addProperty
+addProperty.error.required = Select yes if addProperty
+addProperty.change.hidden = AddProperty
+
+applicantHasUtr.title = applicantHasUtr
+applicantHasUtr.heading = applicantHasUtr
+applicantHasUtr.checkYourAnswersLabel = applicantHasUtr
+applicantHasUtr.error.required = Select yes if applicantHasUtr
+applicantHasUtr.change.hidden = ApplicantHasUtr
+
+applicantName.title = applicantName
+applicantName.heading = applicantName
+applicantName.firstName = firstName
+applicantName.lastName = lastName
+applicantName.checkYourAnswersLabel = ApplicantName
+applicantName.error.firstName.required = Enter firstName
+applicantName.error.lastName.required = Enter lastName
+applicantName.error.firstName.length = firstName must be 100 characters or less
+applicantName.error.lastName.length = lastName must be 100 characters or less
+applicantName.firstName.change.hidden = firstName
+applicantName.lastName.change.hidden = lastName
+
+applicantNino.title = applicantNino
+applicantNino.heading = applicantNino
+applicantNino.checkYourAnswersLabel = applicantNino
+applicantNino.error.required = Enter applicantNino
+applicantNino.error.length = ApplicantNino must be 100 characters or less
+applicantNino.change.hidden = ApplicantNino
+
+applicantUtr.title = applicantUtr
+applicantUtr.heading = applicantUtr
+applicantUtr.checkYourAnswersLabel = applicantUtr
+applicantUtr.error.required = Enter applicantUtr
+applicantUtr.error.length = ApplicantUtr must be 100 characters or less
+applicantUtr.change.hidden = ApplicantUtr
+
+currentAddress.title = currentAddress
+currentAddress.heading = currentAddress
+currentAddress.line1 = line1
+currentAddress.line2 = line2
+currentAddress.checkYourAnswersLabel = CurrentAddress
+currentAddress.error.line1.required = Enter line1
+currentAddress.error.line2.required = Enter line2
+currentAddress.error.line1.length = line1 must be 100 characters or less
+currentAddress.error.line2.length = line2 must be 100 characters or less
+currentAddress.line1.change.hidden = line1
+currentAddress.line2.change.hidden = line2
+
+partnerHasUtr.title = partnerHasUtr
+partnerHasUtr.heading = partnerHasUtr
+partnerHasUtr.checkYourAnswersLabel = partnerHasUtr
+partnerHasUtr.error.required = Select yes if partnerHasUtr
+partnerHasUtr.change.hidden = PartnerHasUtr
+
+partnerName.title = partnerName
+partnerName.heading = partnerName
+partnerName.firstName = firstName
+partnerName.lastName = lastName
+partnerName.checkYourAnswersLabel = PartnerName
+partnerName.error.firstName.required = Enter firstName
+partnerName.error.lastName.required = Enter lastName
+partnerName.error.firstName.length = firstName must be lastName characters or less
+partnerName.error.lastName.length = lastName must be 100 characters or less
+partnerName.firstName.change.hidden = firstName
+partnerName.lastName.change.hidden = lastName
+
+partnerNino.title = partnerNino
+partnerNino.heading = partnerNino
+partnerNino.checkYourAnswersLabel = partnerNino
+partnerNino.error.required = Enter partnerNino
+partnerNino.error.length = PartnerNino must be 100 characters or less
+partnerNino.change.hidden = PartnerNino
+
+partnerUtr.title = partnerUtr
+partnerUtr.heading = partnerUtr
+partnerUtr.checkYourAnswersLabel = partnerUtr
+partnerUtr.error.required = Enter partnerUtr
+partnerUtr.error.length = PartnerUtr must be 100 characters or less
+partnerUtr.change.hidden = PartnerUtr
+
+propertyAddress.title = propertyAddress
+propertyAddress.heading = propertyAddress
+propertyAddress.line1 = line1
+propertyAddress.line2 = line2
+propertyAddress.checkYourAnswersLabel = PropertyAddress
+propertyAddress.error.line1.required = Enter line1
+propertyAddress.error.line2.required = Enter line2
+propertyAddress.error.line1.length = line1 must be 100 characters or less
+propertyAddress.error.line2.length = line2 must be 100 characters or less
+propertyAddress.line1.change.hidden = line1
+propertyAddress.line2.change.hidden = line2
+
+shareOfProperty.title = ShareOfProperty
+shareOfProperty.heading = ShareOfProperty
+shareOfProperty.checkYourAnswersLabel = ShareOfProperty
+shareOfProperty.error.nonNumeric = Enter your shareOfProperty using numbers
+shareOfProperty.error.required = Enter your shareOfProperty
+shareOfProperty.error.wholeNumber = Enter your shareOfProperty using whole numbers
+shareOfProperty.error.outOfRange = ShareOfProperty must be between {0} and {1}
+shareOfProperty.change.hidden = ShareOfProperty
+
+removeProperty.title = removeProperty
+removeProperty.heading = removeProperty
+removeProperty.checkYourAnswersLabel = removeProperty
+removeProperty.error.required = Select yes if removeProperty
+removeProperty.change.hidden = RemoveProperty

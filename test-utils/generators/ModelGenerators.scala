@@ -21,4 +21,36 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryPropertyAddress: Arbitrary[PropertyAddress] =
+    Arbitrary {
+      for {
+        line1 <- arbitrary[String]
+        line2 <- arbitrary[String]
+      } yield PropertyAddress(line1, line2)
+    }
+
+  implicit lazy val arbitraryPartnerName: Arbitrary[PartnerName] =
+    Arbitrary {
+      for {
+        firstName <- arbitrary[String]
+        lastName <- arbitrary[String]
+      } yield PartnerName(firstName, lastName)
+    }
+
+  implicit lazy val arbitraryCurrentAddress: Arbitrary[CurrentAddress] =
+    Arbitrary {
+      for {
+        line1 <- arbitrary[String]
+        line2 <- arbitrary[String]
+      } yield CurrentAddress(line1, line2)
+    }
+
+  implicit lazy val arbitraryApplicantName: Arbitrary[ApplicantName] =
+    Arbitrary {
+      for {
+        firstName <- arbitrary[String]
+        lastName <- arbitrary[String]
+      } yield ApplicantName(firstName, lastName)
+    }
 }
