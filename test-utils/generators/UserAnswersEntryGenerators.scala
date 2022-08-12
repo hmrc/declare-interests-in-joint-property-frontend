@@ -45,7 +45,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[PropertyAddressPage.type]
-        value <- arbitrary[PropertyAddress].map(Json.toJson(_))
+        value <- arbitrary[Address].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -69,7 +69,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[PartnerNamePage.type]
-        value <- arbitrary[PartnerName].map(Json.toJson(_))
+        value <- arbitrary[Name].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -85,7 +85,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[CurrentAddressPage.type]
-        value <- arbitrary[CurrentAddress].map(Json.toJson(_))
+        value <- arbitrary[Address].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -109,7 +109,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[ApplicantNamePage.type]
-        value <- arbitrary[ApplicantName].map(Json.toJson(_))
+        value <- arbitrary[Name].map(Json.toJson(_))
       } yield (page, value)
     }
 

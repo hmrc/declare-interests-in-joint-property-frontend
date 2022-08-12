@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.ApplicantNameFormProvider
-import models.{NormalMode, ApplicantName, UserAnswers}
+import models.{NormalMode, Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -83,7 +83,7 @@ class ApplicantNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ApplicantName("value 1", "value 2")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(Name("value 1", "value 2")), NormalMode)(request, messages(application)).toString
       }
     }
 

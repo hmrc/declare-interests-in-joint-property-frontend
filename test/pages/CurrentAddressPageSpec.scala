@@ -16,17 +16,17 @@
 
 package pages
 
-import models.CurrentAddress
+import models.Address
 import pages.behaviours.PageBehaviours
 
 class CurrentAddressPageSpec extends PageBehaviours {
 
   "CurrentAddressPage" - {
 
-    beRetrievable[CurrentAddress](CurrentAddressPage)
+    beRetrievable[Address](CurrentAddressPage)
 
-    beSettable[CurrentAddress](CurrentAddressPage)
+    beSettable[Address](CurrentAddressPage)
 
-    beRemovable[CurrentAddress](CurrentAddressPage)
+    beRemovable[Address](CurrentAddressPage)
   }
 }
