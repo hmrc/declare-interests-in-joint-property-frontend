@@ -23,6 +23,15 @@ import uk.gov.hmrc.domain.Nino
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryUtr: Arbitrary[Utr] = Arbitrary {
+    for {
+      prefix    <- Gen.option("k").map(_.getOrElse(""))
+      numDigits <- Gen.oneOf(10, 13)
+      digits    <- Gen.listOfN(numDigits, Gen.numChar).map(_.mkString)
+      suffix    <- Gen.option("k").map(_.getOrElse(""))
+    } yield Utr.fromString(prefix + digits + suffix).get
+  }
+
   implicit lazy val arbitraryNino: Arbitrary[Nino] = Arbitrary {
     for {
       firstChar <- Gen.oneOf('A', 'C', 'E', 'H', 'J', 'L', 'M', 'O', 'P', 'R', 'S', 'W', 'X', 'Y').map(_.toString)
