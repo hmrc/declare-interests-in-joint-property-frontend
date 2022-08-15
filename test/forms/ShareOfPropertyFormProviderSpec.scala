@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.IntFieldBehaviours
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class ShareOfPropertyFormProviderSpec extends IntFieldBehaviours {
@@ -27,10 +28,10 @@ class ShareOfPropertyFormProviderSpec extends IntFieldBehaviours {
 
     val fieldName = "value"
 
-    val minimum = 0
+    val minimum = 1
     val maximum = 99
 
-    val validDataGenerator = intsInRangeWithCommas(minimum, maximum)
+    val validDataGenerator = Gen.choose(1, 99).suchThat(_ != 50).map(_.toString)
 
     behave like fieldThatBindsValidData(
       form,
@@ -58,5 +59,10 @@ class ShareOfPropertyFormProviderSpec extends IntFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, "shareOfProperty.error.required")
     )
+
+    "must not bind a value of exactly 50" in {
+      val result = form.bind(Map("value" -> "50"))
+      result.errors must contain only FormError(fieldName, "shareOfProperty.error.equalShare")
+    }
   }
 }
