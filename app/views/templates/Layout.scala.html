@@ -51,6 +51,8 @@
                 message             = Some(messages("timeout.message"))
             )))
         } else None
+
+        <link href="@routes.Assets.versioned("stylesheets/application.css")" media="all" rel="stylesheet" type="text/css"@CSPNonce.get.map {n=> nonce="@n"} />
     )
 }
 
@@ -69,7 +71,7 @@
     }
 
     @if(showBackLink) {
-        @govukBackLink(BackLinkViewModel(href = "#"))
+        @govukBackLink(BackLinkViewModel(href = "#").withCssClass("js-visible"))
     }
 }
 
