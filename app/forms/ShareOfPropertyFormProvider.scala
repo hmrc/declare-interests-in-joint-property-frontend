@@ -17,8 +17,10 @@
 package forms
 
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
 class ShareOfPropertyFormProvider @Inject() extends Mappings {
 
@@ -28,6 +30,14 @@ class ShareOfPropertyFormProvider @Inject() extends Mappings {
         "shareOfProperty.error.required",
         "shareOfProperty.error.wholeNumber",
         "shareOfProperty.error.nonNumeric")
-          .verifying(inRange(0, 99, "shareOfProperty.error.outOfRange"))
+          .verifying(
+            inRange(1, 99, "shareOfProperty.error.outOfRange"),
+            notEqualShare
+          )
     )
+
+  private def notEqualShare: Constraint[Int] = Constraint {
+    case n if n == 50 => Invalid("shareOfProperty.error.equalShare")
+    case _            => Valid
+  }
 }

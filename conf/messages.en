@@ -211,7 +211,8 @@ shareOfProperty.hint = Your spouse or civil partner will receive the remaining s
 shareOfProperty.error.nonNumeric = Enter the share of this property you own using numbers
 shareOfProperty.error.required = Enter the share of this property you own
 shareOfProperty.error.wholeNumber = Enter the share of this property you own using whole numbers
-shareOfProperty.error.outOfRange = ShareOfProperty must be between {0} and {1}
+shareOfProperty.error.outOfRange = The share of this property you own must be between {0} and {1}
+shareOfProperty.error.equalShare = The share of this property you own must not be 50%
 shareOfProperty.change.hidden = the share of this property you own
 
 removeProperty.title = Are you sure you want to remove this property?
