@@ -40,7 +40,7 @@ class ShareOfPropertyControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = 0
+  val validAnswer = 1
 
   lazy val shareOfPropertyRoute = routes.ShareOfPropertyController.onPageLoad(NormalMode).url
 
