@@ -56,6 +56,11 @@ index.p3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR)
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.applicantDetails = Your details
+checkYourAnswers.partnerDetails = Spouse or civil partner details
+checkYourAnswers.propertyDetails = Properties jointly held
+checkYourAnswers.beforeYouContinue = Before you continue
+checkYourAnswers.guidance = By continuing this application you are confirming that, to the best of your knowledge, the details you are providing are correct.
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service

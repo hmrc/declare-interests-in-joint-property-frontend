@@ -22,6 +22,7 @@ import pages.{AddPropertyPage, CheckPropertyPage}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import queries.AllProperties
+import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import viewmodels.govuk.summarylist._
@@ -42,15 +43,20 @@ object AddPropertySummary  {
         )
     }
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AddPropertyPage).map {
-      answer =>
+  def checkAnswersRow(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+    answers.get(AllProperties).map {
+      properties =>
 
-        val value = if (answer) "site.yes" else "site.no"
+        val propertyAddresses = properties.map {
+          property =>
+            property.address.lines.map(HtmlFormat.escape).mkString("<br/>")
+        }
+
+        val value = propertyAddresses.mkString("<br/><br/>")
 
         SummaryListRowViewModel(
           key     = "addProperty.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
+          value   = ValueViewModel(HtmlContent(value)),
           actions = Seq(
             ActionItemViewModel("site.change", routes.AddPropertyController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText(messages("addProperty.change.hidden"))

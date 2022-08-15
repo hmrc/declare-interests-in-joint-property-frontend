@@ -15,15 +15,25 @@
  *@
 
 @this(
-    layout: templates.Layout,
-    govukSummaryList: GovukSummaryList
+        layout: templates.Layout,
+        govukSummaryList: GovukSummaryList
 )
 
-@(list: SummaryList)(implicit request: Request[_], messages: Messages)
+@(applicantDetails: SummaryList, partnerDetails: SummaryList, properties: SummaryList)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("checkYourAnswers.title"))) {
+    @layout(pageTitle = titleNoForm(messages("checkYourAnswers.title"))) {
 
-    <h1 class="govuk-heading-xl">@messages("checkYourAnswers.heading")</h1>
+        <h1 class="govuk-heading-xl">@messages("checkYourAnswers.heading")</h1>
 
-    @govukSummaryList(list)
-}
+        <h2 class="govuk-heading-m">@messages("checkYourAnswers.applicantDetails")</h2>
+        @govukSummaryList(applicantDetails.withCssClass("govuk-!-margin-bottom-9"))
+
+        <h2 class="govuk-heading-m">@messages("checkYourAnswers.partnerDetails")</h2>
+        @govukSummaryList(partnerDetails.withCssClass("govuk-!-margin-bottom-9"))
+
+        <h2 class="govuk-heading-m">@messages("checkYourAnswers.propertyDetails")</h2>
+        @govukSummaryList(properties.withCssClass("govuk-!-margin-bottom-9"))
+
+        <h2 class="govuk-heading-m">@messages("checkYourAnswers.beforeYouContinue")</h2>
+        <p class="govuk-body">@messages("checkYourAnswers.guidance")</p>
+    }

@@ -21,6 +21,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.checkAnswers._
 import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
 
@@ -36,10 +37,29 @@ class CheckYourAnswersController @Inject()(
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val list = SummaryListViewModel(
-        rows = Seq.empty
+      val applicantDetails = SummaryListViewModel(
+        rows = Seq(
+          ApplicantNameSummary.row(request.userAnswers),
+          ApplicantNinoSummary.row(request.userAnswers),
+          ApplicantHasUtrSummary.row(request.userAnswers),
+          ApplicantUtrSummary.row(request.userAnswers),
+          CurrentAddressSummary.row(request.userAnswers)
+        ).flatten
       )
 
-      Ok(view(list))
+      val partnerDetails = SummaryListViewModel(
+        rows = Seq(
+          PartnerNameSummary.row(request.userAnswers),
+          PartnerNinoSummary.row(request.userAnswers),
+          PartnerHasUtrSummary.row(request.userAnswers),
+          PartnerUtrSummary.row(request.userAnswers)
+        ).flatten
+      )
+
+      val properties = SummaryListViewModel(
+        rows = Seq(AddPropertySummary.checkAnswersRow(request.userAnswers)).flatten
+      )
+
+      Ok(view(applicantDetails, partnerDetails, properties))
   }
 }
