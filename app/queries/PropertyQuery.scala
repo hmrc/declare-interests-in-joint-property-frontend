@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package queries
 
-import models.Index
+import models.{Index, Property}
 import play.api.libs.json.JsPath
 
-final case class RemovePropertyPage(index: Index) extends Page
+final case class PropertyQuery(index: Index) extends Gettable[Property] with Settable[Property] {
+
+  override def path: JsPath = JsPath \ "properties" \ index.position
+}

@@ -25,6 +25,7 @@ import navigation.Navigator
 import pages.RemovePropertyPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import queries.PropertyQuery
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemovePropertyView
@@ -47,13 +48,7 @@ class RemovePropertyController @Inject()(
 
   def onPageLoad(mode: Mode, index: Index): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-
-      val preparedForm = request.userAnswers.get(RemovePropertyPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode, index))
+      Ok(view(form, mode, index))
   }
 
   def onSubmit(mode: Mode, index: Index): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -64,10 +59,14 @@ class RemovePropertyController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode, index))),
 
         value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemovePropertyPage(index), value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemovePropertyPage(index), mode, updatedAnswers))
+          if (value) {
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.remove(PropertyQuery(index)))
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(RemovePropertyPage(index), mode, updatedAnswers))
+          } else {
+            Future.successful(Redirect(navigator.nextPage(RemovePropertyPage(index), mode, request.userAnswers)))
+          }
       )
   }
 }

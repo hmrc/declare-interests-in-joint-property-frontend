@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.Index
-import play.api.libs.json.JsPath
+import play.api.libs.json.{Json, OFormat}
 
-final case class RemovePropertyPage(index: Index) extends Page
+case class Property(address: Address, applicantShare: Int)
+
+object Property {
+
+  implicit val format: OFormat[Property] = Json.format
+}
