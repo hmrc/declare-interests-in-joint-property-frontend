@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.RemovePropertyFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Index, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -36,11 +36,12 @@ import scala.concurrent.Future
 class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
+  val index = Index(0)
 
   val formProvider = new RemovePropertyFormProvider()
   val form = formProvider()
 
-  lazy val removePropertyRoute = routes.RemovePropertyController.onPageLoad(NormalMode).url
+  lazy val removePropertyRoute = routes.RemovePropertyController.onPageLoad(NormalMode, index).url
 
   "RemoveProperty Controller" - {
 
@@ -56,13 +57,13 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[RemovePropertyView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, index)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(RemovePropertyPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(RemovePropertyPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,7 +75,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, index)(request, messages(application)).toString
       }
     }
 
@@ -120,7 +121,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, index)(request, messages(application)).toString
       }
     }
 

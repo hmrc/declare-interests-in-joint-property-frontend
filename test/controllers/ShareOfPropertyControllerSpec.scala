@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.ShareOfPropertyFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Index, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -37,12 +37,13 @@ class ShareOfPropertyControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new ShareOfPropertyFormProvider()
   val form = formProvider()
+  val index = Index(0)
 
   def onwardRoute = Call("GET", "/foo")
 
   val validAnswer = 0
 
-  lazy val shareOfPropertyRoute = routes.ShareOfPropertyController.onPageLoad(NormalMode).url
+  lazy val shareOfPropertyRoute = routes.ShareOfPropertyController.onPageLoad(NormalMode, index).url
 
   "ShareOfProperty Controller" - {
 
@@ -58,13 +59,13 @@ class ShareOfPropertyControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[ShareOfPropertyView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, index)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ShareOfPropertyPage, validAnswer).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(ShareOfPropertyPage(index), validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,7 +77,7 @@ class ShareOfPropertyControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode, index)(request, messages(application)).toString
       }
     }
 
@@ -122,7 +123,7 @@ class ShareOfPropertyControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, index)(request, messages(application)).toString
       }
     }
 

@@ -16,9 +16,10 @@
 
 package pages
 
+import models.Index
 import play.api.libs.json.JsPath
 
-case object RemovePropertyPage extends QuestionPage[Boolean] {
+final case class RemovePropertyPage(index: Index) extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 

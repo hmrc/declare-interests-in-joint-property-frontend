@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.PropertyAddressFormProvider
-import models.{Address, NormalMode}
+import models.{Address, Index, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -36,14 +36,15 @@ import scala.concurrent.Future
 class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
+  val index = Index(0)
 
   val formProvider = new PropertyAddressFormProvider()
   val form = formProvider()
 
-  lazy val propertyAddressRoute = routes.PropertyAddressController.onPageLoad(NormalMode).url
+  lazy val propertyAddressRoute = routes.PropertyAddressController.onPageLoad(NormalMode, index).url
   private val validAnswer = Address("line1", None, "town", None, "postcode")
 
-  val userAnswers = emptyUserAnswers.set(PropertyAddressPage, validAnswer).success.value
+  val userAnswers = emptyUserAnswers.set(PropertyAddressPage(index), validAnswer).success.value
 
   "PropertyAddress Controller" - {
 
@@ -59,7 +60,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, index)(request, messages(application)).toString
       }
     }
 
@@ -75,7 +76,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode, index)(request, messages(application)).toString
       }
     }
 
@@ -121,7 +122,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, index)(request, messages(application)).toString
       }
     }
 

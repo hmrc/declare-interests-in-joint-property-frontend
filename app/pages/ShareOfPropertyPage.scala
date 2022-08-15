@@ -16,11 +16,12 @@
 
 package pages
 
+import models.Index
 import play.api.libs.json.JsPath
 
-case object ShareOfPropertyPage extends QuestionPage[Int] {
+final case class ShareOfPropertyPage(index: Index) extends QuestionPage[Int] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "properties" \ index.position \ toString
 
-  override def toString: String = "shareOfProperty"
+  override def toString: String = "applicantShare"
 }

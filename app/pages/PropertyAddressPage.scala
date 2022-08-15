@@ -16,12 +16,12 @@
 
 package pages
 
-import models.Address
+import models.{Address, Index}
 import play.api.libs.json.JsPath
 
-case object PropertyAddressPage extends QuestionPage[Address] {
+final case class PropertyAddressPage(index: Index) extends QuestionPage[Address] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "properties" \ index.position \ toString
 
-  override def toString: String = "propertyAddress"
+  override def toString: String = "address"
 }
