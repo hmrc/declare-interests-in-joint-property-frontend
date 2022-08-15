@@ -16,6 +16,8 @@
 
 package pages
 
+import models.{UserAnswers, Utr}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class ApplicantHasUtrPageSpec extends PageBehaviours {
@@ -27,5 +29,13 @@ class ApplicantHasUtrPageSpec extends PageBehaviours {
     beSettable[Boolean](ApplicantHasUtrPage)
 
     beRemovable[Boolean](ApplicantHasUtrPage)
+
+    "Applicant UTR must be removed when the answer is set to false" in {
+
+      val initialAnswers = emptyUserAnswers.set(ApplicantUtrPage, arbitrary[Utr].sample.value).success.value
+
+      val result = initialAnswers.set(ApplicantHasUtrPage, false).success.value
+      result.get(ApplicantUtrPage) must not be defined
+    }
   }
 }
