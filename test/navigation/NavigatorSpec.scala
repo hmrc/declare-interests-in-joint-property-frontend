@@ -88,6 +88,63 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(PartnerUtrPage, NormalMode, emptyUserAnswers) mustBe routes.CurrentAddressController.onPageLoad(NormalMode)
       }
+
+      "must go from Current Address to Property Address for index 0" in {
+
+        navigator.nextPage(CurrentAddressPage, NormalMode, emptyUserAnswers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+      }
+
+      "must go from Property Address to Share of Property for the same index" in {
+
+        navigator.nextPage(PropertyAddressPage(Index(0)), NormalMode, emptyUserAnswers) mustBe routes.ShareOfPropertyController.onPageLoad(NormalMode, Index(0))
+        navigator.nextPage(PropertyAddressPage(Index(1)), NormalMode, emptyUserAnswers) mustBe routes.ShareOfPropertyController.onPageLoad(NormalMode, Index(1))
+      }
+
+      "must go from Share of Property to Check Property for the same index" in {
+
+        navigator.nextPage(ShareOfPropertyPage(Index(0)), NormalMode, emptyUserAnswers) mustBe routes.CheckPropertyController.onPageLoad(Index(0))
+        navigator.nextPage(ShareOfPropertyPage(Index(1)), NormalMode, emptyUserAnswers) mustBe routes.CheckPropertyController.onPageLoad(Index(1))
+      }
+
+      "must go from Check Property to Add Property" in {
+
+        navigator.nextPage(CheckPropertyPage(Index(0)), NormalMode, emptyUserAnswers) mustBe routes.AddPropertyController.onPageLoad(NormalMode)
+        navigator.nextPage(CheckPropertyPage(Index(1)), NormalMode, emptyUserAnswers) mustBe routes.AddPropertyController.onPageLoad(NormalMode)
+      }
+
+      "must go from Add Property to Property Address for the next index when the answer is yes" in {
+
+        val address = Address("line 1", None, "town", None, "postcode")
+        val answers =
+          emptyUserAnswers
+            .set(PropertyAddressPage(Index(0)), address).success.value
+            .set(ShareOfPropertyPage(Index(0)), 1).success.value
+            .set(AddPropertyPage, true).success.value
+
+        navigator.nextPage(AddPropertyPage, NormalMode, answers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(1))
+      }
+
+      "must go from Add Property to Check Answers when the answer is no" in {
+
+        val answers = emptyUserAnswers.set(AddPropertyPage, false).success.value
+        navigator.nextPage(AddPropertyPage, NormalMode, answers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Remove Property to Add Property when there is at least one property left" in {
+
+        val address = Address("line 1", None, "town", None, "postcode")
+        val answers =
+          emptyUserAnswers
+            .set(PropertyAddressPage(Index(0)), address).success.value
+            .set(ShareOfPropertyPage(Index(0)), 1).success.value
+
+        navigator.nextPage(RemovePropertyPage(Index(0)), NormalMode, answers) mustBe routes.AddPropertyController.onPageLoad(NormalMode)
+      }
+
+      "must go from Remove Property to Property Address when index 0 when there are no properties left" in {
+
+        navigator.nextPage(RemovePropertyPage(Index(0)), NormalMode, emptyUserAnswers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+      }
     }
 
     "in Check mode" - {
@@ -175,6 +232,18 @@ class NavigatorSpec extends SpecBase {
       "must go from Current Address to Check Answers" in {
 
         navigator.nextPage(CurrentAddressPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Property Address to Check Property" in {
+
+        navigator.nextPage(PropertyAddressPage(Index(0)), CheckMode, emptyUserAnswers) mustBe routes.CheckPropertyController.onPageLoad(Index(0))
+        navigator.nextPage(PropertyAddressPage(Index(1)), CheckMode, emptyUserAnswers) mustBe routes.CheckPropertyController.onPageLoad(Index(1))
+      }
+
+      "must go from Share of Property to Check Property" in {
+
+        navigator.nextPage(ShareOfPropertyPage(Index(0)), CheckMode, emptyUserAnswers) mustBe routes.CheckPropertyController.onPageLoad(Index(0))
+        navigator.nextPage(ShareOfPropertyPage(Index(1)), CheckMode, emptyUserAnswers) mustBe routes.CheckPropertyController.onPageLoad(Index(1))
       }
     }
   }

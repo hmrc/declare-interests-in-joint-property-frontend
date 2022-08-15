@@ -17,25 +17,31 @@
 package navigation
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.Call
 import controllers.routes
 import pages._
 import models._
+import queries.AllProperties
 
 @Singleton
 class Navigator @Inject()() {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case ApplicantNamePage   => _ => routes.ApplicantNinoController.onPageLoad(NormalMode)
-    case ApplicantNinoPage   => _ => routes.ApplicantHasUtrController.onPageLoad(NormalMode)
-    case ApplicantHasUtrPage => applicantHasUtrRoute
-    case ApplicantUtrPage    => _ => routes.PartnerNameController.onPageLoad(NormalMode)
-    case PartnerNamePage     => _ => routes.PartnerNinoController.onPageLoad(NormalMode)
-    case PartnerNinoPage     => _ => routes.PartnerHasUtrController.onPageLoad(NormalMode)
-    case PartnerHasUtrPage   => partnerHasUtrRoute
-    case PartnerUtrPage      => _ => routes.CurrentAddressController.onPageLoad(NormalMode)
-    case _ => _ => routes.IndexController.onPageLoad
+    case ApplicantNamePage          => _ => routes.ApplicantNinoController.onPageLoad(NormalMode)
+    case ApplicantNinoPage          => _ => routes.ApplicantHasUtrController.onPageLoad(NormalMode)
+    case ApplicantHasUtrPage        => applicantHasUtrRoute
+    case ApplicantUtrPage           => _ => routes.PartnerNameController.onPageLoad(NormalMode)
+    case PartnerNamePage            => _ => routes.PartnerNinoController.onPageLoad(NormalMode)
+    case PartnerNinoPage            => _ => routes.PartnerHasUtrController.onPageLoad(NormalMode)
+    case PartnerHasUtrPage          => partnerHasUtrRoute
+    case PartnerUtrPage             => _ => routes.CurrentAddressController.onPageLoad(NormalMode)
+    case CurrentAddressPage         => _ => routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+    case PropertyAddressPage(index) => _ => routes.ShareOfPropertyController.onPageLoad(NormalMode, index)
+    case ShareOfPropertyPage(index) => _ => routes.CheckPropertyController.onPageLoad(index)
+    case CheckPropertyPage(_)       => _ => routes.AddPropertyController.onPageLoad(NormalMode)
+    case AddPropertyPage            => addPropertyRoute
+    case RemovePropertyPage(_)      => removePropertyRoute
+    case _                          => _ => routes.IndexController.onPageLoad
   }
 
   private def applicantHasUtrRoute(answers: UserAnswers): Call =
@@ -50,10 +56,34 @@ class Navigator @Inject()() {
       case false => routes.CurrentAddressController.onPageLoad(NormalMode)
     }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
 
+  private def addPropertyRoute(answers: UserAnswers): Call =
+    answers.get(AddPropertyPage).map {
+      case true =>
+        answers.get(AllProperties)
+          .map(properties => routes.PropertyAddressController.onPageLoad(NormalMode, Index(properties.size)))
+          .getOrElse(routes.JourneyRecoveryController.onPageLoad())
+
+      case false =>
+        routes.CheckYourAnswersController.onPageLoad
+    }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
+
+  private def removePropertyRoute(answers: UserAnswers): Call = {
+    val properties = answers.get(AllProperties).getOrElse(Nil)
+
+    if (properties.isEmpty) {
+      routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+    }
+    else {
+      routes.AddPropertyController.onPageLoad(NormalMode)
+    }
+  }
+
   private val checkRouteMap: Page => UserAnswers => Call = {
-    case ApplicantHasUtrPage => applicantHasUtrCheckRoute
-    case PartnerHasUtrPage   => partnerHasUtrCheckRoute
-    case _                   => _ => routes.CheckYourAnswersController.onPageLoad
+    case ApplicantHasUtrPage        => applicantHasUtrCheckRoute
+    case PartnerHasUtrPage          => partnerHasUtrCheckRoute
+    case PropertyAddressPage(index) => _ => routes.CheckPropertyController.onPageLoad(index)
+    case ShareOfPropertyPage(index) => _ => routes.CheckPropertyController.onPageLoad(index)
+    case _                          => _ => routes.CheckYourAnswersController.onPageLoad
   }
 
   private def applicantHasUtrCheckRoute(answers: UserAnswers): Call = {
