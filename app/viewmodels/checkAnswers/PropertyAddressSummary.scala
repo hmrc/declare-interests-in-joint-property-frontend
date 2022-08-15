@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{CheckMode, Index, UserAnswers}
 import pages.PropertyAddressPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -28,8 +28,8 @@ import viewmodels.implicits._
 
 object PropertyAddressSummary  {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PropertyAddressPage).map {
+  def row(answers: UserAnswers, index: Index)(implicit messages: Messages): Option[SummaryListRow] =
+    answers.get(PropertyAddressPage(index)).map {
       answer =>
 
         val value = answer.lines.map(HtmlFormat.escape).mkString("<br/>")
@@ -38,7 +38,7 @@ object PropertyAddressSummary  {
           key     = "propertyAddress.checkYourAnswersLabel",
           value   = ValueViewModel(HtmlContent(value)),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.PropertyAddressController.onPageLoad(CheckMode).url)
+            ActionItemViewModel("site.change", routes.PropertyAddressController.onPageLoad(CheckMode, index).url)
               .withVisuallyHiddenText(messages("propertyAddress.change.hidden"))
           )
         )

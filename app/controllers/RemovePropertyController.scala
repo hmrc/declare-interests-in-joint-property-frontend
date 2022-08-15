@@ -18,12 +18,14 @@ package controllers
 
 import controllers.actions._
 import forms.RemovePropertyFormProvider
+
 import javax.inject.Inject
-import models.Mode
+import models.{Index, Mode}
 import navigation.Navigator
-import pages.RemovePropertyPage
+import pages.{PropertyAddressPage, RemovePropertyPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import queries.PropertyQuery
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemovePropertyView
@@ -40,33 +42,41 @@ class RemovePropertyController @Inject()(
                                          formProvider: RemovePropertyFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: RemovePropertyView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                 )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
+    with I18nSupport
+    with AnswerExtractor {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode, index: Index): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
+      getAnswer(PropertyAddressPage(index)) {
+        address =>
 
-      val preparedForm = request.userAnswers.get(RemovePropertyPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+          Ok(view(form, mode, index, address))
       }
-
-      Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode, index: Index): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+      getAnswerAsync(PropertyAddressPage(index)) {
+        address =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+          form.bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(BadRequest(view(formWithErrors, mode, index, address))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemovePropertyPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemovePropertyPage, mode, updatedAnswers))
-      )
+            value =>
+              if (value) {
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.remove(PropertyQuery(index)))
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(RemovePropertyPage(index), mode, updatedAnswers))
+              } else {
+                Future.successful(Redirect(navigator.nextPage(RemovePropertyPage(index), mode, request.userAnswers)))
+              }
+          )
+      }
   }
 }

@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.{Address, Index}
-import play.api.libs.json.JsPath
+import play.api.libs.json.{Json, OFormat}
 
-final case class PropertyAddressPage(index: Index) extends QuestionPage[Address] {
+case class Property(address: Address, applicantShare: Int)
 
-  override def path: JsPath = JsPath \ "properties" \ index.position \ toString
+object Property {
 
-  override def toString: String = "address"
+  implicit val format: OFormat[Property] = Json.format
 }

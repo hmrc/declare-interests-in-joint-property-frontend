@@ -14,17 +14,35 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.{ListItem, Long}
+@import viewmodels.LegendSize
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    addToList: components.addToList,
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, properties: Seq[ListItem])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("addProperty.title"))) {
+@titleText = @{
+    properties.size match {
+        case 1 => messages("addProperty.title.singular")
+        case i => messages("addProperty.title.plural", i)
+    }
+}
+
+@headingText = @{
+    properties.size match {
+        case 1 => messages("addProperty.heading.singular")
+        case i => messages("addProperty.heading.plural", i)
+    }
+}
+
+@layout(pageTitle = title(form, titleText)) {
 
     @formHelper(action = routes.AddPropertyController.onSubmit(mode), 'autoComplete -> "off") {
 
@@ -32,10 +50,14 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        <h1 class="govuk-heading-xl">@headingText</h1>
+
+        @addToList(properties, Long, "addProperty.change.hidden", "addChild.remove.hidden")
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("addProperty.heading")).asPageHeading()
+                legend = LegendViewModel(messages("addProperty.addAnother")).withSize(LegendSize.Medium)
             )
         )
 

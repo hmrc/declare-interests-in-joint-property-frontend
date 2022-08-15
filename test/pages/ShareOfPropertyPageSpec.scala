@@ -16,16 +16,17 @@
 
 package pages
 
+import models.Index
 import pages.behaviours.PageBehaviours
 
 class ShareOfPropertyPageSpec extends PageBehaviours {
 
   "ShareOfPropertyPage" - {
 
-    beRetrievable[Int](ShareOfPropertyPage)
+    beRetrievable[Int](ShareOfPropertyPage(Index(0)))
 
-    beSettable[Int](ShareOfPropertyPage)
+    beSettable[Int](ShareOfPropertyPage(Index(0)))
 
-    beRemovable[Int](ShareOfPropertyPage)
+    beRemovable[Int](ShareOfPropertyPage(Index(0)))
   }
 }

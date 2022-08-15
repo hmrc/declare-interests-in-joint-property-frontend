@@ -56,6 +56,11 @@ index.p3.bullet2 = Self Assessment Unique Taxpayer Reference (UTR)
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.applicantDetails = Your details
+checkYourAnswers.partnerDetails = Spouse or civil partner details
+checkYourAnswers.propertyDetails = Properties jointly held
+checkYourAnswers.beforeYouContinue = Before you continue
+checkYourAnswers.guidance = By continuing this application you are confirming that, to the best of your knowledge, the details you are providing are correct.
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
@@ -121,17 +126,23 @@ applicantUtr.error.required = Enter your Self Assessment Unique Taxpayer Referen
 applicantUtr.error.invalid = Enter your Self Assessment Unique Taxpayer Reference in the correct format
 applicantUtr.change.hidden = your Self Assessment Unique Taxpayer Reference
 
-currentAddress.title = currentAddress
-currentAddress.heading = currentAddress
-currentAddress.line1 = line1
-currentAddress.line2 = line2
-currentAddress.checkYourAnswersLabel = CurrentAddress
-currentAddress.error.line1.required = Enter line1
-currentAddress.error.line2.required = Enter line2
-currentAddress.error.line1.length = line1 must be 100 characters or less
-currentAddress.error.line2.length = line2 must be 100 characters or less
-currentAddress.line1.change.hidden = line1
-currentAddress.line2.change.hidden = line2
+currentAddress.title = What is your and your spouse or civil partner’s address?
+currentAddress.heading = What is your and your spouse or civil partner’s address?
+currentAddress.line1 = Address line 1
+currentAddress.line2 = Address line 2 (optional)
+currentAddress.townOrCity = Town or city
+currentAddress.county = County (optional)
+currentAddress.postcode = Postcode
+currentAddress.checkYourAnswersLabel = What is your and your spouse or civil partner’s address?
+currentAddress.error.line1.required = Enter address line 1
+currentAddress.error.townOrCity.required = Enter the town or city
+currentAddress.error.postcode.required = Enter the postcode
+currentAddress.error.line1.length = Address line 1 must be 100 characters or less
+currentAddress.error.line2.length = Address line 2 must be 100 characters or less
+currentAddress.error.county.length = Town or city must be 100 characters or less
+currentAddress.error.townOrCity.length = County must be 100 characters or less
+currentAddress.error.postcode.length = Postcode must be 100 characters or less
+currentAddress.change.hidden = your and your spouse or civil partner’s address
 
 partnerHasUtr.title = Does your spouse or civil partner have a Self Assessment Unique Taxpayer Reference (UTR)?
 partnerHasUtr.heading = Does your spouse or civil partner have a Self Assessment Unique Taxpayer Reference (UTR)?
@@ -206,3 +217,6 @@ shareOfProperty.change.hidden = the share of this property you own
 removeProperty.title = Are you sure you want to remove this property?
 removeProperty.heading = Are you sure you want to remove this property?
 removeProperty.error.required = Select yes if you want to remove this property
+
+checkProperty.title = Check property details
+checkProperty.heading = Check property details

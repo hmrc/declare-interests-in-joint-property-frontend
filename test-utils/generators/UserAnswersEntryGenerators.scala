@@ -25,26 +25,18 @@ import uk.gov.hmrc.domain.Nino
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
-  implicit lazy val arbitraryRemovePropertyUserAnswersEntry: Arbitrary[(RemovePropertyPage.type, JsValue)] =
+  implicit lazy val arbitraryShareOfPropertyUserAnswersEntry: Arbitrary[(ShareOfPropertyPage, JsValue)] =
     Arbitrary {
       for {
-        page  <- arbitrary[RemovePropertyPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryShareOfPropertyUserAnswersEntry: Arbitrary[(ShareOfPropertyPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[ShareOfPropertyPage.type]
+        page  <- arbitrary[ShareOfPropertyPage]
         value <- arbitrary[Int].map(Json.toJson(_))
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryPropertyAddressUserAnswersEntry: Arbitrary[(PropertyAddressPage.type, JsValue)] =
+  implicit lazy val arbitraryPropertyAddressUserAnswersEntry: Arbitrary[(PropertyAddressPage, JsValue)] =
     Arbitrary {
       for {
-        page  <- arbitrary[PropertyAddressPage.type]
+        page  <- arbitrary[PropertyAddressPage]
         value <- arbitrary[Address].map(Json.toJson(_))
       } yield (page, value)
     }

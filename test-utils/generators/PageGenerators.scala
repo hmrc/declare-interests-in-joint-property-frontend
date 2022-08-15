@@ -16,19 +16,17 @@
 
 package generators
 
+import models.Index
 import org.scalacheck.Arbitrary
 import pages._
 
 trait PageGenerators {
 
-  implicit lazy val arbitraryRemovePropertyPage: Arbitrary[RemovePropertyPage.type] =
-    Arbitrary(RemovePropertyPage)
+  implicit lazy val arbitraryShareOfPropertyPage: Arbitrary[ShareOfPropertyPage] =
+    Arbitrary(ShareOfPropertyPage(Index(0)))
 
-  implicit lazy val arbitraryShareOfPropertyPage: Arbitrary[ShareOfPropertyPage.type] =
-    Arbitrary(ShareOfPropertyPage)
-
-  implicit lazy val arbitraryPropertyAddressPage: Arbitrary[PropertyAddressPage.type] =
-    Arbitrary(PropertyAddressPage)
+  implicit lazy val arbitraryPropertyAddressPage: Arbitrary[PropertyAddressPage] =
+    Arbitrary(PropertyAddressPage(Index(0)))
 
   implicit lazy val arbitraryPartnerUtrPage: Arbitrary[PartnerUtrPage.type] =
     Arbitrary(PartnerUtrPage)

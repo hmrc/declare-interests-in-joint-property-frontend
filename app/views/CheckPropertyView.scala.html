@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,26 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages
+@this(
+        layout: templates.Layout,
+        govukSummaryList: GovukSummaryList,
+        formHelper: FormWithCSRF,
+        govukButton: GovukButton,
+)
 
-import models.{Address, Index}
-import play.api.libs.json.JsPath
+@(list: SummaryList, index: Index)(implicit request: Request[_], messages: Messages)
 
-final case class PropertyAddressPage(index: Index) extends QuestionPage[Address] {
+@layout(pageTitle = titleNoForm(messages("checkProperty.title"))) {
 
-  override def path: JsPath = JsPath \ "properties" \ index.position \ toString
+    @formHelper(action = routes.CheckPropertyController.onSubmit(index)){
+        <h1 class="govuk-heading-xl">@messages("checkProperty.heading")</h1>
 
-  override def toString: String = "address"
+        @govukSummaryList(list)
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
 }

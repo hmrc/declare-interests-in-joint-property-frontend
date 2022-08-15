@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{CheckMode, Index, UserAnswers}
 import pages.ShareOfPropertyPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -26,15 +26,15 @@ import viewmodels.implicits._
 
 object ShareOfPropertySummary  {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(ShareOfPropertyPage).map {
+  def row(answers: UserAnswers, index: Index)(implicit messages: Messages): Option[SummaryListRow] =
+    answers.get(ShareOfPropertyPage(index)).map {
       answer =>
 
         SummaryListRowViewModel(
           key     = "shareOfProperty.checkYourAnswersLabel",
           value   = ValueViewModel(answer.toString),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.ShareOfPropertyController.onPageLoad(CheckMode).url)
+            ActionItemViewModel("site.change", routes.ShareOfPropertyController.onPageLoad(CheckMode, index).url)
               .withVisuallyHiddenText(messages("shareOfProperty.change.hidden"))
           )
         )

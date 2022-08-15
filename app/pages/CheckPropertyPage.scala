@@ -16,16 +16,6 @@
 
 package pages
 
-import pages.behaviours.PageBehaviours
+import models.Index
 
-class RemovePropertyPageSpec extends PageBehaviours {
-
-  "RemovePropertyPage" - {
-
-    beRetrievable[Boolean](RemovePropertyPage)
-
-    beSettable[Boolean](RemovePropertyPage)
-
-    beRemovable[Boolean](RemovePropertyPage)
-  }
-}
+final case class CheckPropertyPage(index: Index) extends Page

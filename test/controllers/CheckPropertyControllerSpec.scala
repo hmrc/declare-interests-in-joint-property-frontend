@@ -17,29 +17,47 @@
 package controllers
 
 import base.SpecBase
+import models.{Address, Index}
+import pages.{PropertyAddressPage, ShareOfPropertyPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.checkAnswers.{PropertyAddressSummary, ShareOfPropertySummary}
 import viewmodels.govuk.SummaryListFluency
-import views.html.CheckYourAnswersView
+import views.html.CheckPropertyView
 
-class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency {
+class CheckPropertyControllerSpec extends SpecBase with SummaryListFluency {
 
-  "Check Your Answers Controller" - {
+  private val index = Index(0)
+
+  "Check Property Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val address = Address("line 1", None, "town", None, "postcode")
+      val share = 1
+
+      val answers =
+        emptyUserAnswers
+          .set(PropertyAddressPage(index), address).success.value
+          .set(ShareOfPropertyPage(index), share).success.value
+
+      val application = applicationBuilder(userAnswers = Some(answers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, routes.CheckPropertyController.onPageLoad(index).url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[CheckYourAnswersView]
-        val list = SummaryListViewModel(Seq.empty)
+        val view = application.injector.instanceOf[CheckPropertyView]
+
+        val list =
+          SummaryListViewModel(Seq(
+            PropertyAddressSummary.row(answers, index)(messages(application)),
+            ShareOfPropertySummary.row(answers, index)(messages(application))
+          ).flatten)
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(list, list, list)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(list, index)(request, messages(application)).toString
       }
     }
 

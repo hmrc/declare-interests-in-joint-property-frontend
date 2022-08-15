@@ -18,48 +18,41 @@ package controllers
 
 import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.{Index, NormalMode}
+import navigation.Navigator
+import pages.CheckPropertyPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers._
+import viewmodels.checkAnswers.{PropertyAddressSummary, ShareOfPropertySummary}
 import viewmodels.govuk.summarylist._
-import views.html.CheckYourAnswersView
+import views.html.CheckPropertyView
 
-class CheckYourAnswersController @Inject()(
+class CheckPropertyController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
+                                            navigator: Navigator,
                                             val controllerComponents: MessagesControllerComponents,
-                                            view: CheckYourAnswersView
+                                            view: CheckPropertyView
                                           ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(index: Index): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val applicantDetails = SummaryListViewModel(
+      val list = SummaryListViewModel(
         rows = Seq(
-          ApplicantNameSummary.row(request.userAnswers),
-          ApplicantNinoSummary.row(request.userAnswers),
-          ApplicantHasUtrSummary.row(request.userAnswers),
-          ApplicantUtrSummary.row(request.userAnswers),
-          CurrentAddressSummary.row(request.userAnswers)
+          PropertyAddressSummary.row(request.userAnswers, index),
+          ShareOfPropertySummary.row(request.userAnswers, index)
         ).flatten
       )
 
-      val partnerDetails = SummaryListViewModel(
-        rows = Seq(
-          PartnerNameSummary.row(request.userAnswers),
-          PartnerNinoSummary.row(request.userAnswers),
-          PartnerHasUtrSummary.row(request.userAnswers),
-          PartnerUtrSummary.row(request.userAnswers)
-        ).flatten
-      )
+      Ok(view(list, index))
+  }
 
-      val properties = SummaryListViewModel(
-        rows = Seq(AddPropertySummary.checkAnswersRow(request.userAnswers)).flatten
-      )
-
-      Ok(view(applicantDetails, partnerDetails, properties))
+  def onSubmit(index: Index): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request =>
+      Redirect(navigator.nextPage(CheckPropertyPage(index), NormalMode, request.userAnswers))
   }
 }
