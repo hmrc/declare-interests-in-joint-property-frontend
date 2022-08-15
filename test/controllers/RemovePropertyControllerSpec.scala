@@ -43,6 +43,10 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
   val address = Address("line1", None, "town", None, "postcode")
   val share = 1
+  val baseAnswers =
+    emptyUserAnswers
+      .set(PropertyAddressPage(Index(0)), address).success.value
+      .set(ShareOfPropertyPage(Index(0)), share).success.value
 
   lazy val removePropertyRoute = routes.RemovePropertyController.onPageLoad(NormalMode, index).url
 
@@ -50,7 +54,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, removePropertyRoute)
@@ -60,16 +64,11 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[RemovePropertyView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, index)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, index, address)(request, messages(application)).toString
       }
     }
 
     "must remove the property and redirect to the next page when the answer is true" in {
-
-      val baseAnswers =
-        emptyUserAnswers
-          .set(PropertyAddressPage(index), address).success.value
-          .set(ShareOfPropertyPage(index), share).success.value
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -99,11 +98,6 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
 
     "must not remove the property and redirect to the next page when the answer is false" in {
 
-      val baseAnswers =
-        emptyUserAnswers
-          .set(PropertyAddressPage(index), address).success.value
-          .set(ShareOfPropertyPage(index), share).success.value
-
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -131,7 +125,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =
@@ -145,7 +139,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, index)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, index, address)(request, messages(application)).toString
       }
     }
 

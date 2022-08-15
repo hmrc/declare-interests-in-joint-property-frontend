@@ -22,7 +22,7 @@ import forms.RemovePropertyFormProvider
 import javax.inject.Inject
 import models.{Index, Mode}
 import navigation.Navigator
-import pages.RemovePropertyPage
+import pages.{PropertyAddressPage, RemovePropertyPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import queries.PropertyQuery
@@ -42,31 +42,41 @@ class RemovePropertyController @Inject()(
                                          formProvider: RemovePropertyFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: RemovePropertyView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                 )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
+    with I18nSupport
+    with AnswerExtractor {
 
   val form = formProvider()
 
   def onPageLoad(mode: Mode, index: Index): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view(form, mode, index))
+      getAnswer(PropertyAddressPage(index)) {
+        address =>
+
+          Ok(view(form, mode, index, address))
+      }
   }
 
   def onSubmit(mode: Mode, index: Index): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+      getAnswerAsync(PropertyAddressPage(index)) {
+        address =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, index))),
+          form.bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(BadRequest(view(formWithErrors, mode, index, address))),
 
-        value =>
-          if (value) {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.remove(PropertyQuery(index)))
-              _ <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(RemovePropertyPage(index), mode, updatedAnswers))
-          } else {
-            Future.successful(Redirect(navigator.nextPage(RemovePropertyPage(index), mode, request.userAnswers)))
-          }
-      )
+            value =>
+              if (value) {
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.remove(PropertyQuery(index)))
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(RemovePropertyPage(index), mode, updatedAnswers))
+              } else {
+                Future.successful(Redirect(navigator.nextPage(RemovePropertyPage(index), mode, request.userAnswers)))
+              }
+          )
+      }
   }
 }
