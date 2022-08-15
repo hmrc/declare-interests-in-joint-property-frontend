@@ -84,3 +84,6 @@ GET        /remove-property/:index                        controllers.RemoveProp
 POST       /remove-property/:index                        controllers.RemovePropertyController.onSubmit(mode: Mode = NormalMode, index: Index)
 GET        /change-remove-property/:index                  controllers.RemovePropertyController.onPageLoad(mode: Mode = CheckMode, index: Index)
 POST       /change-remove-property/:index                  controllers.RemovePropertyController.onSubmit(mode: Mode = CheckMode, index: Index)
+
+GET         /check-property/:index                      controllers.CheckPropertyController.onPageLoad(index: Index)
+POST        /check-property/:index                      controllers.CheckPropertyController.onSubmit(index: Index)

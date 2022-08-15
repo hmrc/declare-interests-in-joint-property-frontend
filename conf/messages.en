@@ -206,3 +206,6 @@ shareOfProperty.change.hidden = the share of this property you own
 removeProperty.title = Are you sure you want to remove this property?
 removeProperty.heading = Are you sure you want to remove this property?
 removeProperty.error.required = Select yes if you want to remove this property
+
+checkProperty.title = Check property details
+checkProperty,heading = Check property details
