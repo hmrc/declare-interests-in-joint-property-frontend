@@ -46,8 +46,9 @@
                 field = form("value"),
                 label = LabelViewModel(messages("partnerUtr.heading")).withCssClass("govuk-visually-hidden")
             )
-                    .withWidth(Fixed10)
-                    .withHint(HintViewModel(messages("partnerUtr.hint")))
+            .withWidth(Fixed10)
+            .withHint(HintViewModel(messages("partnerUtr.hint")))
+            .withAttribute("spellcheck", "false")
         )
 
         @govukButton(
