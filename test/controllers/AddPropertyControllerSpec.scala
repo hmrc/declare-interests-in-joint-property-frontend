@@ -18,17 +18,18 @@ package controllers
 
 import base.SpecBase
 import forms.AddPropertyFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Address, Index, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddPropertyPage
+import pages.{AddPropertyPage, PropertyAddressPage, ShareOfPropertyPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import viewmodels.checkAnswers.AddPropertySummary
 import views.html.AddPropertyView
 
 import scala.concurrent.Future
@@ -40,13 +41,19 @@ class AddPropertyControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new AddPropertyFormProvider()
   val form = formProvider()
 
-  lazy val addPropertyRoute = routes.AddPropertyController.onPageLoad(NormalMode).url
+  private lazy val addPropertyRoute = routes.AddPropertyController.onPageLoad(NormalMode).url
+  private val address = Address("line 1", None, "town", None, "postcode")
+  private val share = 1
+  private val baseAnswers =
+    emptyUserAnswers
+      .set(PropertyAddressPage(Index(0)), address).success.value
+      .set(ShareOfPropertyPage(Index(0)), share).success.value
 
   "AddProperty Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, addPropertyRoute)
@@ -54,15 +61,16 @@ class AddPropertyControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[AddPropertyView]
+        val summaries = AddPropertySummary.rows(baseAnswers)
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, summaries)(request, messages(application)).toString
       }
     }
 
     "must not populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AddPropertyPage, true).success.value
+      val userAnswers = baseAnswers.set(AddPropertyPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -70,11 +78,12 @@ class AddPropertyControllerSpec extends SpecBase with MockitoSugar {
         val request = FakeRequest(GET, addPropertyRoute)
 
         val view = application.injector.instanceOf[AddPropertyView]
+        val summaries = AddPropertySummary.rows(baseAnswers)
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, summaries)(request, messages(application)).toString
       }
     }
 
@@ -85,7 +94,7 @@ class AddPropertyControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -106,7 +115,7 @@ class AddPropertyControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =
@@ -116,11 +125,12 @@ class AddPropertyControllerSpec extends SpecBase with MockitoSugar {
         val boundForm = form.bind(Map("value" -> ""))
 
         val view = application.injector.instanceOf[AddPropertyView]
+        val summaries = AddPropertySummary.rows(baseAnswers)
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, summaries)(request, messages(application)).toString
       }
     }
 

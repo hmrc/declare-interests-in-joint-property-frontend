@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions._
 import forms.AddPropertyFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
@@ -26,6 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.checkAnswers.AddPropertySummary
 import views.html.AddPropertyView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,15 +49,20 @@ class AddPropertyController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      Ok(view(form, mode))
+      val propertySummaries = AddPropertySummary.rows(request.userAnswers)
+
+      Ok(view(form, mode, propertySummaries))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => {
+          val propertySummaries = AddPropertySummary.rows(request.userAnswers)
+
+          Future.successful(BadRequest(view(formWithErrors, mode, propertySummaries)))
+        },
 
         value =>
           for {

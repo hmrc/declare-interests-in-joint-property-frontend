@@ -17,14 +17,30 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages.AddPropertyPage
+import models.{CheckMode, Index, NormalMode, UserAnswers}
+import pages.{AddPropertyPage, CheckPropertyPage}
 import play.api.i18n.Messages
+import play.twirl.api.{Html, HtmlFormat}
+import queries.AllProperties
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import uk.gov.hmrc.hmrcfrontend.views.viewmodels.addtoalist.ListItem
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
 object AddPropertySummary  {
+
+  def rows(answers: UserAnswers): Seq[ListItem] =
+    answers.get(AllProperties).getOrElse(Nil).zipWithIndex.map {
+      case (property, index) =>
+
+        val name = property.address.lines.map(HtmlFormat.escape).mkString(", ")
+
+        ListItem(
+          name      = name,
+          changeUrl = routes.CheckPropertyController.onPageLoad(Index(index)).url,
+          removeUrl = routes.RemovePropertyController.onPageLoad(NormalMode, Index(index)).url
+        )
+    }
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(AddPropertyPage).map {
