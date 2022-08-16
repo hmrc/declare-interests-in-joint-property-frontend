@@ -16,6 +16,7 @@
 
 package controllers
 
+import audit.AuditService
 import com.dmanchester.playfop.sapi.PlayFop
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import logging.Logging
@@ -36,6 +37,7 @@ class PrintController @Inject()(
                                  getData: DataRetrievalAction,
                                  requireData: DataRequiredAction,
                                  fop: PlayFop,
+                                 auditService: AuditService,
                                  template: PrintTemplate,
                                  view: PrintView
                                ) extends FrontendBaseController with I18nSupport with Logging {
@@ -80,6 +82,7 @@ class PrintController @Inject()(
       withJourneyModel(request.userAnswers) {
         journeyModel =>
           val pdf = fop.processTwirlXml(template.render(journeyModel, implicitly), MimeConstants.MIME_PDF, foUserAgentBlock = userAgentBlock)
+          auditService.auditDownload(journeyModel)
           Ok(pdf).as("application/octet-stream").withHeaders(CONTENT_DISPOSITION -> "attachment; filename=declare-interest-in-joint-property-by-post.pdf")
       }
   }
