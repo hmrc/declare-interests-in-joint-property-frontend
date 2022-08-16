@@ -224,6 +224,19 @@ checkProperty.heading = Check property details
 
 print.title = Your application form is ready to be posted
 print.heading = Your application form is ready to be posted
+print.whatYouNeedToDo = What you need to do
+print.bullet1 = download, save and print your form
+print.bullet2 = sign and date your declaration
+print.bullet3 = get your spouse or civil partner to sign and date their declaration
+print.bullet4 = post your form to HMRC
+print.bullet5 = post the required documents to HMRC
+print.address = HMRC address:
+print.address.line1 = Pay As You Earn and Self Assessment
+print.address.line2 = HM Revenue & Customs
+print.address.line3 = BX9 1AS
+print.address.line4 = United Kingdom
+print.documentsToPost = Documents you need to post
+print.documentsToPost.guidance = For each property post evidence that your benefit interests are unequal, such as a deed or declaration.
 print.button = Download form
 
 pdf.title = Declare beneficial interests in joint property

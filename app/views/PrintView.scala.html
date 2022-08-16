@@ -26,5 +26,25 @@
 
     @govukPanel(Panel(title = messages("print.heading")))
 
+    <h2 class="govuk-heading-m">@messages("print.whatYouNeedToDo")</h2>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("print.bullet1")</li>
+        <li>@messages("print.bullet2")</li>
+        <li>@messages("print.bullet3")</li>
+        <li>@messages("print.bullet4")</li>
+        <li>@messages("print.bullet5")</li>
+    </ul>
+
+    <p class="govuk-body">@messages("print.address")</p>
+    <p class="govuk-body">
+        @messages("print.address.line1")<br/>
+        @messages("print.address.line2")<br/>
+        @messages("print.address.line3")<br/>
+        @messages("print.address.line4")
+    </p>
+
+    <h2 class="govuk-heading-m">@messages("print.documentsToPost")</h2>
+    <p class="govuk-body">@messages("print.documentsToPost.guidance")</p>
+
     <a id="download" href="@routes.PrintController.onDownload" class="govuk-button" download>@messages("print.button")</a>
 }
