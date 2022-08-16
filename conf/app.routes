@@ -87,3 +87,6 @@ POST       /change-remove-property/:index                  controllers.RemovePro
 
 GET         /check-property/:index                      controllers.CheckPropertyController.onPageLoad(index: Index)
 POST        /check-property/:index                      controllers.CheckPropertyController.onSubmit(index: Index)
+
+GET        /print-form                         controllers.PrintController.onDownload
+GET        /next-steps                         controllers.PrintController.onPageLoad

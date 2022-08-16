@@ -1,0 +1,20 @@
+@import views.xml.xml.sections._
+
+@this(
+    mainHeader: MainHeader
+)
+
+    @(model: JourneyModel)(implicit messages: Messages)
+
+<fo:page-sequence master-reference="main" initial-page-number="1">
+
+    @mainHeader(model)
+
+    <fo:flow flow-name="xsl-region-body" font-size="12pt" text-align="left">
+
+        <fo:block-container width="90%">
+            <fo:block>
+            </fo:block>
+        </fo:block-container>
+    </fo:flow>
+</fo:page-sequence>
