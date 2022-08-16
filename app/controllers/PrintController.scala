@@ -46,8 +46,8 @@ class PrintController @Inject()(
     foUserAgent.setAuthor("HMRC forms service")
     foUserAgent.setProducer("HMRC forms services")
     foUserAgent.setCreator("HMRC forms services")
-    foUserAgent.setSubject("Claim Child Benefit by post form")
-    foUserAgent.setTitle("Claim Child Benefit by post form")
+    foUserAgent.setSubject("Declare interests in joint property by post form")
+    foUserAgent.setTitle("Declare interests in joint property by post form")
   }
 
   private def withJourneyModel(answers: UserAnswers)(f: JourneyModel => Result): Result = {
