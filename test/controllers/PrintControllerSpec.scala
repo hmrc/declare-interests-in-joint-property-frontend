@@ -16,12 +16,13 @@
 
 package controllers
 
+import audit.AuditService
 import base.SpecBase
 import com.dmanchester.playfop.sapi.PlayFop
 import generators.ModelGenerators
 import models.{Address, Index, Name, UserAnswers, Utr}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{never, times, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.mockito.MockitoSugar
@@ -99,14 +100,18 @@ class PrintControllerSpec extends SpecBase with ModelGenerators with MockitoSuga
       }
     }
 
-    "must return OK for onDownload when user answers are complete" in {
+    "must return OK and audit the download for onDownload when user answers are complete" in {
 
+      val mockAuditService = mock[AuditService]
       val mockFop = mock[PlayFop]
       when(mockFop.processTwirlXml(any(), any(), any(), any())) thenReturn "hello".getBytes
 
       val application =
         applicationBuilder(userAnswers = Some(completeAnswers))
-          .overrides(bind[PlayFop].toInstance(mockFop))
+          .overrides(
+            bind[PlayFop].toInstance(mockFop),
+            bind[AuditService].toInstance(mockAuditService)
+          )
           .build()
 
       running(application) {
@@ -116,6 +121,7 @@ class PrintControllerSpec extends SpecBase with ModelGenerators with MockitoSuga
 
         status(result) mustEqual OK
         contentAsBytes(result).decodeString(Charset.defaultCharset()) mustEqual "hello"
+        verify(mockAuditService, times(1)).auditDownload(any())(any())
       }
     }
 
@@ -123,12 +129,16 @@ class PrintControllerSpec extends SpecBase with ModelGenerators with MockitoSuga
 
       val incompleteAnswers = completeAnswers.remove(ApplicantNamePage).success.value
 
+      val mockAuditService = mock[AuditService]
       val mockFop = mock[PlayFop]
       when(mockFop.processTwirlXml(any(), any(), any(), any())) thenReturn "hello".getBytes
 
       val application =
         applicationBuilder(userAnswers = Some(incompleteAnswers))
-          .overrides(bind[PlayFop].toInstance(mockFop))
+          .overrides(
+            bind[PlayFop].toInstance(mockFop),
+            bind[AuditService].toInstance(mockAuditService)
+          )
           .build()
 
       running(application) {
@@ -138,6 +148,7 @@ class PrintControllerSpec extends SpecBase with ModelGenerators with MockitoSuga
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        verify(mockAuditService, never()).auditDownload(any())(any())
       }
     }
   }
