@@ -32,11 +32,22 @@ object ShareOfPropertySummary  {
 
         SummaryListRowViewModel(
           key     = "shareOfProperty.checkYourAnswersLabel",
-          value   = ValueViewModel(answer.toString),
+          value   = ValueViewModel(s"$answer%"),
           actions = Seq(
             ActionItemViewModel("site.change", routes.ShareOfPropertyController.onPageLoad(CheckMode, index).url)
               .withVisuallyHiddenText(messages("shareOfProperty.change.hidden"))
           )
+        )
+    }
+
+  def partnerRow(answers: UserAnswers, index: Index)(implicit messages: Messages): Option[SummaryListRow] =
+    answers.get(ShareOfPropertyPage(index)).map {
+      answer =>
+
+        SummaryListRowViewModel(
+          key     = "shareOfProperty.partner.checkYourAnswersLabel",
+          value   = ValueViewModel(s"${100 - answer}%"),
+          actions = Nil
         )
     }
 }

@@ -44,7 +44,8 @@ class CheckPropertyController @Inject()(
       val list = SummaryListViewModel(
         rows = Seq(
           PropertyAddressSummary.row(request.userAnswers, index),
-          ShareOfPropertySummary.row(request.userAnswers, index)
+          ShareOfPropertySummary.row(request.userAnswers, index),
+          ShareOfPropertySummary.partnerRow(request.userAnswers, index)
         ).flatten
       )
 

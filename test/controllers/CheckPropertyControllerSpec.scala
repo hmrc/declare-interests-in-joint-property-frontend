@@ -49,15 +49,17 @@ class CheckPropertyControllerSpec extends SpecBase with SummaryListFluency {
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[CheckPropertyView]
+        implicit val msgs = messages(application)
 
         val list =
           SummaryListViewModel(Seq(
-            PropertyAddressSummary.row(answers, index)(messages(application)),
-            ShareOfPropertySummary.row(answers, index)(messages(application))
+            PropertyAddressSummary.row(answers, index),
+            ShareOfPropertySummary.row(answers, index),
+            ShareOfPropertySummary.partnerRow(answers, index)
           ).flatten)
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(list, index)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(list, index)(request, implicitly).toString
       }
     }
 
