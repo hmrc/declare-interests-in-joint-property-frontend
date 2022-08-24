@@ -43,13 +43,14 @@ object AddPropertySummary  {
         )
     }
 
-  def checkAnswersRow(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+  def checkAnswersRow(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
     answers.get(AllProperties).map {
       properties =>
 
         val propertyAddresses = properties.map {
           property =>
-            property.address.lines.map(HtmlFormat.escape).mkString("<br/>")
+            val lines = messages("addProperty.youOwn", property.applicantShare) +: property.address.lines.map(HtmlFormat.escape)
+            lines.mkString("<br/>")
         }
 
         val value = propertyAddresses.mkString("<br/><br/>")
@@ -63,4 +64,5 @@ object AddPropertySummary  {
           )
         )
     }
+  }
 }
