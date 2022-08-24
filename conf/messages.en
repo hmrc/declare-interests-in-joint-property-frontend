@@ -85,6 +85,7 @@ addProperty.addAnother = Do you have another property you want to declare?
 addProperty.error.required = Select yes if you have another property you want to declare
 addProperty.change.hidden = the details for {0}
 addProperty.remove.hidden = {0}
+addProperty.youOwn = You own {0}% of
 
 applicantHasUtr.title = Do you have a Self Assessment Unique Taxpayer Reference (UTR)?
 applicantHasUtr.heading = Do you have a Self Assessment Unique Taxpayer Reference (UTR)?
@@ -215,6 +216,7 @@ shareOfProperty.error.wholeNumber = Enter the share of this property you own usi
 shareOfProperty.error.outOfRange = The share of this property you own must be between {0} and {1}
 shareOfProperty.error.equalShare = The share of this property you own must not be 50%
 shareOfProperty.change.hidden = the share of this property you own
+shareOfProperty.partner.change.hidden = the shares of this property you and your spouse or civil partner own
 
 removeProperty.title = Are you sure you want to remove this property?
 removeProperty.heading = Are you sure you want to remove this property?

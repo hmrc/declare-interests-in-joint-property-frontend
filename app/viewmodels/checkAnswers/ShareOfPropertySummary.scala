@@ -47,7 +47,10 @@ object ShareOfPropertySummary  {
         SummaryListRowViewModel(
           key     = "shareOfProperty.partner.checkYourAnswersLabel",
           value   = ValueViewModel(s"${100 - answer}%"),
-          actions = Nil
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.ShareOfPropertyController.onPageLoad(CheckMode, index).url)
+              .withVisuallyHiddenText(messages("shareOfProperty.partner.change.hidden"))
+          )
         )
     }
 }

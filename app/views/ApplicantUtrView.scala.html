@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablinkhelper.NewTabLinkHelper
 @import viewmodels.InputWidth._
 
 @this(
@@ -21,7 +22,8 @@
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+        newTabLink: HmrcNewTabLinkHelper
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -38,7 +40,10 @@
 
         <p class="govuk-body">
             @messages("applicantUtr.guidance")
-            <a href="@messages("applicantUtr.guidance.link.href")" class="govuk-link">@messages("applicantUtr.guidance.link.text")</a>.
+            @newTabLink(NewTabLinkHelper(
+                text = messages("applicantUtr.guidance.link.text"),
+                href = Some(messages("applicantUtr.guidance.link.href"))
+            )).
         </p>
 
         @govukInput(
