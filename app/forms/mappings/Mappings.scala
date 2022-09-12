@@ -17,7 +17,7 @@
 package forms.mappings
 
 import java.time.LocalDate
-import play.api.data.FieldMapping
+import play.api.data.{FieldMapping, Mapping}
 import play.api.data.Forms.of
 import models.{Enumerable, Utr}
 
@@ -53,4 +53,6 @@ trait Mappings extends Formatters with Constraints {
 
   protected def utr(requiredKey: String, invalidKey: String, args: Seq[String] = Nil): FieldMapping[Utr] =
     of(utrFormatter(requiredKey, invalidKey, args))
+
+  protected def optional[A](mapping: Mapping[A]): Mapping[Option[A]] = WhitespaceAwareOptionalMapping(mapping)
 }
