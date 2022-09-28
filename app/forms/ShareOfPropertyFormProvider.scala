@@ -21,23 +21,40 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
+import scala.util.Try
 
 class ShareOfPropertyFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Int] =
     Form(
-      "value" -> int(
-        "shareOfProperty.error.required",
-        "shareOfProperty.error.wholeNumber",
-        "shareOfProperty.error.nonNumeric")
-          .verifying(
-            inRange(1, 99, "shareOfProperty.error.outOfRange"),
-            notEqualShare
-          )
+      "value" -> text("shareOfProperty.error.required")
+        .verifying(firstError(
+          inverseRegexp("""^-?%?(\d*\.\d*)%?$""", "shareOfProperty.error.wholeNumber"),
+          isNumeric("shareOfProperty.error.nonNumeric")
+        ))
+        .transform[Int](s => s.replaceAll("%", "").toInt, i => i.toString)
+        .verifying(
+          inRange(1, 99, "shareOfProperty.error.outOfRange"),
+          notEqualShare)
     )
 
   private def notEqualShare: Constraint[Int] = Constraint {
     case n if n == 50 => Invalid("shareOfProperty.error.equalShare")
     case _            => Valid
   }
+
+  private def inverseRegexp(regex: String, errorKey: String): Constraint[String] =
+    Constraint {
+      case str if str.matches(regex) =>
+        Invalid(errorKey)
+      case _ =>
+        Valid
+    }
+  private def isNumeric(errorKey: String): Constraint[String] =
+    Constraint {
+      case str if Try(str.replaceAll("%", "").toInt).isSuccess =>
+        Valid
+      case _ =>
+        Invalid(errorKey)
+    }
 }
