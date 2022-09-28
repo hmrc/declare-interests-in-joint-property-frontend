@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.IntFieldBehaviours
+import jdk.jfr.Percentage
 import org.scalacheck.Gen
 import play.api.data.FormError
 
@@ -30,8 +31,12 @@ class ShareOfPropertyFormProviderSpec extends IntFieldBehaviours {
 
     val minimum = 1
     val maximum = 99
+    val percent = "%"
 
-    val validDataGenerator = Gen.choose(1, 99).suchThat(_ != 50).map(_.toString)
+    val validDataGenerator = for {
+      num <- Gen.chooseNum(1, 99).suchThat(_ != 50)
+      percent <- Gen.oneOf("", "%")
+    } yield s"$num$percent"
 
     behave like fieldThatBindsValidData(
       form,
