@@ -16,21 +16,30 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import models.{Country, InternationalAddress}
 import play.api.data.Form
 import play.api.data.Forms._
-import models.CurrentAddressInternational
+
+import javax.inject.Inject
 
 class CurrentAddressInternationalFormProvider @Inject() extends Mappings {
 
-   def apply(): Form[CurrentAddressInternational] = Form(
-     mapping(
+  def apply(): Form[InternationalAddress] = Form(
+    mapping(
       "line1" -> text("currentAddressInternational.error.line1.required")
         .verifying(maxLength(100, "currentAddressInternational.error.line1.length")),
-      "line2" -> text("currentAddressInternational.error.line2.required")
-        .verifying(maxLength(100, "currentAddressInternational.error.line2.length"))
-    )(CurrentAddressInternational.apply)(CurrentAddressInternational.unapply)
-   )
- }
+      "line2" -> optional(text("currentAddressInternational.error.line2.required")
+        .verifying(maxLength(100, "currentAddressInternational.error.line2.length"))),
+      "town" -> text("currentAddressInternational.error.town.required")
+        .verifying(maxLength(100, "currentAddressInternational.error.town.length")),
+      "state" -> optional(text("currentAddressInternational.error.state.required")
+        .verifying(maxLength(100, "currentAddressInternational.error.state.length"))),
+      "postcode" -> optional(text("currentAddressInternational.error.postcode.required")
+        .verifying(maxLength(100, "currentAddressInternational.error.postcode.length"))),
+      "country" -> text("currentAddressInternational.error.country.required")
+        .verifying("currentAddressInternational.error.country.required", value => Country.internationalCountries.exists(_.code == value))
+        .transform[Country](value => Country.internationalCountries.find(_.code == value).get, _.code)
+    )(InternationalAddress.apply)(InternationalAddress.unapply)
+  )
+}

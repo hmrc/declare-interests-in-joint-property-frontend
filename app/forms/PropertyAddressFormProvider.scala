@@ -17,7 +17,7 @@
 package forms
 
 import forms.mappings.Mappings
-import models.Address
+import models.UkAddress
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class PropertyAddressFormProvider @Inject() extends Mappings {
 
 
-  def apply(): Form[Address] = Form(
+  def apply(): Form[UkAddress] = Form(
     mapping(
       "line1" -> text("propertyAddress.error.line1.required")
         .verifying(maxLength(100, "propertyAddress.error.line1.length")),
@@ -38,6 +38,6 @@ class PropertyAddressFormProvider @Inject() extends Mappings {
         .verifying(maxLength(100, "propertyAddress.error.county.length"))),
       "postcode" -> text("propertyAddress.error.postcode.required")
         .verifying(maxLength(100, "propertyAddress.error.postcode.length"))
-    )(Address.apply)(Address.unapply)
+    )(UkAddress.apply)(UkAddress.unapply)
   )
 }

@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{Address, Index}
+import models.{Address, Index, UkAddress}
 import pages.{PropertyAddressPage, ShareOfPropertyPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -33,7 +33,7 @@ class CheckPropertyControllerSpec extends SpecBase with SummaryListFluency {
 
     "must return OK and the correct view for a GET" in {
 
-      val address = Address("line 1", None, "town", None, "postcode")
+      val address = UkAddress("line 1", None, "town", None, "postcode")
       val share = 1
 
       val answers =

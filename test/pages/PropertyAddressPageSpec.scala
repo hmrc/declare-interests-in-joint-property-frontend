@@ -16,17 +16,17 @@
 
 package pages
 
-import models.{Address, Index}
+import models.{Index, UkAddress}
 import pages.behaviours.PageBehaviours
 
 class PropertyAddressPageSpec extends PageBehaviours {
 
   "PropertyAddressPage" - {
 
-    beRetrievable[Address](PropertyAddressPage(Index(0)))
+    beRetrievable[UkAddress](PropertyAddressPage(Index(0)))
 
-    beSettable[Address](PropertyAddressPage(Index(0)))
+    beSettable[UkAddress](PropertyAddressPage(Index(0)))
 
-    beRemovable[Address](PropertyAddressPage(Index(0)))
+    beRemovable[UkAddress](PropertyAddressPage(Index(0)))
   }
 }

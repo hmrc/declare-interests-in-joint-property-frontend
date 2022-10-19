@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.RemovePropertyFormProvider
-import models.{Address, Index, NormalMode}
+import models.{Index, NormalMode, UkAddress}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{PropertyAddressPage, RemovePropertyPage, ShareOfPropertyPage}
+import pages.{PropertyAddressPage, ShareOfPropertyPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -41,7 +41,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new RemovePropertyFormProvider()
   val form = formProvider()
-  val address = Address("line1", None, "town", None, "postcode")
+  val address = UkAddress("line1", None, "town", None, "postcode")
   val share = 1
   val baseAnswers =
     emptyUserAnswers

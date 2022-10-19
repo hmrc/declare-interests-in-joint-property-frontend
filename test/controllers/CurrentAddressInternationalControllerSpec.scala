@@ -18,14 +18,13 @@ package controllers
 
 import base.SpecBase
 import forms.CurrentAddressInternationalFormProvider
-import models.{NormalMode, CurrentAddressInternational, UserAnswers}
+import models.{Country, InternationalAddress, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.CurrentAddressInternationalPage
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -43,15 +42,9 @@ class CurrentAddressInternationalControllerSpec extends SpecBase with MockitoSug
 
   lazy val currentAddressInternationalRoute = routes.CurrentAddressInternationalController.onPageLoad(NormalMode).url
 
-  val userAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      CurrentAddressInternationalPage.toString -> Json.obj(
-        "line1" -> "value 1",
-        "line2" -> "value 2"
-      )
-    )
-  )
+  private val country = Country.internationalCountries.head
+  private val validAnswer = InternationalAddress("line1", None, "town", None, Some("postcode"), country)
+  val userAnswers = emptyUserAnswers.set(CurrentAddressInternationalPage, validAnswer).success.value
 
   "CurrentAddressInternational Controller" - {
 
@@ -83,7 +76,7 @@ class CurrentAddressInternationalControllerSpec extends SpecBase with MockitoSug
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(CurrentAddressInternational("value 1", "value 2")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -104,7 +97,7 @@ class CurrentAddressInternationalControllerSpec extends SpecBase with MockitoSug
       running(application) {
         val request =
           FakeRequest(POST, currentAddressInternationalRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+            .withFormUrlEncodedBody(("line1", "line 1"), ("town", "town"), ("postcode", "postcode"), ("country", country.code))
 
         val result = route(application, request).value
 
@@ -154,7 +147,7 @@ class CurrentAddressInternationalControllerSpec extends SpecBase with MockitoSug
       running(application) {
         val request =
           FakeRequest(POST, currentAddressInternationalRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+            .withFormUrlEncodedBody(("line1", "line 1"), ("town", "town"), ("postcode", "postcode"), ("country", country.code))
 
         val result = route(application, request).value
 

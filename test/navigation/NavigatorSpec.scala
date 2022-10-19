@@ -114,7 +114,7 @@ class NavigatorSpec extends SpecBase {
 
       "must go from Add Property to Property Address for the next index when the answer is yes" in {
 
-        val address = Address("line 1", None, "town", None, "postcode")
+        val address = UkAddress("line 1", None, "town", None, "postcode")
         val answers =
           emptyUserAnswers
             .set(PropertyAddressPage(Index(0)), address).success.value
@@ -132,7 +132,7 @@ class NavigatorSpec extends SpecBase {
 
       "must go from Remove Property to Add Property when there is at least one property left" in {
 
-        val address = Address("line 1", None, "town", None, "postcode")
+        val address = UkAddress("line 1", None, "town", None, "postcode")
         val answers =
           emptyUserAnswers
             .set(PropertyAddressPage(Index(0)), address).success.value

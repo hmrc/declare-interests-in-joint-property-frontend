@@ -56,7 +56,7 @@ class AuditServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with 
           name    = models.Name("first", "last"),
           nino    = applicantNino,
           utr     = Some(applicantUtr),
-          address = models.Address("line 1", Some("line 2"), "town", Some("county"), "postcode")
+          address = models.UkAddress("line 1", Some("line 2"), "town", Some("county"), "postcode")
         ),
         partner = JourneyModel.Partner(
           name = models.Name("partner first", "partner last"),
@@ -65,11 +65,11 @@ class AuditServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with 
         ),
         properties = NonEmptyList(
           head = models.Property(
-            address        = models.Address("p1 line 1", Some("p1 line 2"), "p1 town", Some("p1 county"), "p1 postcode"),
+            address        = models.UkAddress("p1 line 1", Some("p1 line 2"), "p1 town", Some("p1 county"), "p1 postcode"),
             applicantShare = 1
           ),
           tail = List(models.Property(
-            address        = models.Address("p2 line 1", Some("p2 line 2"), "p2 town", Some("p2 county"), "p2 postcode"),
+            address        = models.UkAddress("p2 line 1", Some("p2 line 2"), "p2 town", Some("p2 county"), "p2 postcode"),
             applicantShare = 2
           ))
         )
@@ -80,7 +80,7 @@ class AuditServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with 
           name    = Name("first", "last"),
           nino    = applicantNino.value,
           utr     = Some(applicantUtr.value),
-          address = Address("line 1", Some("line 2"), "town", Some("county"), "postcode")
+          address = UkAddress("line 1", Some("line 2"), "town", Some("county"), "postcode")
         ),
         partner = Partner(
           name    = Name("partner first", "partner last"),
@@ -89,11 +89,11 @@ class AuditServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with 
         ),
         properties = List(
           Property(
-            address        = Address("p1 line 1", Some("p1 line 2"), "p1 town", Some("p1 county"), "p1 postcode"),
+            address        = UkAddress("p1 line 1", Some("p1 line 2"), "p1 town", Some("p1 county"), "p1 postcode"),
             applicantShare = 1
           ),
           Property(
-            address        = Address("p2 line 1", Some("p2 line 2"), "p2 town", Some("p2 county"), "p2 postcode"),
+            address        = UkAddress("p2 line 1", Some("p2 line 2"), "p2 town", Some("p2 county"), "p2 postcode"),
             applicantShare = 2
           )
         )

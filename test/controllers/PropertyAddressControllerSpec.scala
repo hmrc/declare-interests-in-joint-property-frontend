@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.PropertyAddressFormProvider
-import models.{Address, Index, NormalMode}
+import models.{Index, NormalMode, UkAddress}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -42,7 +42,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   lazy val propertyAddressRoute = routes.PropertyAddressController.onPageLoad(NormalMode, index).url
-  private val validAnswer = Address("line1", None, "town", None, "postcode")
+  private val validAnswer = UkAddress("line1", None, "town", None, "postcode")
 
   val userAnswers = emptyUserAnswers.set(PropertyAddressPage(index), validAnswer).success.value
 

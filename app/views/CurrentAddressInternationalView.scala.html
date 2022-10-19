@@ -14,14 +14,16 @@
  * limitations under the License.
  *@
 
+@import models.Country._
 @import viewmodels.InputWidth._
 
 @this(
-    layout: templates.Layout,
-    formHelper: FormWithCSRF,
-    govukErrorSummary: GovukErrorSummary,
-    govukInput: GovukInput,
-    govukButton: GovukButton
+        layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        govukErrorSummary: GovukErrorSummary,
+        govukInput: GovukInput,
+        govukSelect: GovukSelect,
+        govukButton: GovukButton
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -41,7 +43,8 @@
                 field = form("line1"),
                 label = LabelViewModel(messages("currentAddressInternational.line1"))
             )
-            .withWidth(Full)
+                    .withWidth(Full)
+                    .withAutocomplete("address-line1")
         )
 
         @govukInput(
@@ -50,6 +53,43 @@
                 label = LabelViewModel(messages("currentAddressInternational.line2"))
             )
             .withWidth(Full)
+            .withAutocomplete("address-line2")
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("town"),
+                label = LabelViewModel(messages("currentAddressInternational.town"))
+            )
+            .withWidth(TwoThirds)
+            .withAutocomplete("address-level2")
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("state"),
+                label = LabelViewModel(messages("currentAddressInternational.state"))
+            )
+            .withWidth(TwoThirds)
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("postcode"),
+                label = LabelViewModel(messages("currentAddressInternational.postcode"))
+            )
+            .withWidth(Fixed10)
+            .withAutocomplete("postal-code")
+        )
+
+        @govukSelect(
+            SelectViewModel(
+                field = form("country"),
+                items = selectItems(internationalCountries),
+                label = LabelViewModel(messages("currentAddressInternational.country"))
+            )
+            .withCssClass(Fixed20.toString)
+            .withCssClass("autocomplete")
         )
 
         @govukButton(

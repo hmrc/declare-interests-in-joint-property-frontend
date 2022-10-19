@@ -29,7 +29,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[CurrentAddressInternationalPage.type]
-        value <- arbitrary[CurrentAddressInternational].map(Json.toJson(_))
+        value <- arbitrary[InternationalAddress].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -53,7 +53,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[PropertyAddressPage]
-        value <- arbitrary[Address].map(Json.toJson(_))
+        value <- arbitrary[UkAddress].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -89,11 +89,11 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryCurrentAddressUserAnswersEntry: Arbitrary[(CurrentAddressUkPage.type, JsValue)] =
+  implicit lazy val arbitraryCurrentAddressUkUserAnswersEntry: Arbitrary[(CurrentAddressUkPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[CurrentAddressUkPage.type]
-        value <- arbitrary[Address].map(Json.toJson(_))
+        value <- arbitrary[UkAddress].map(Json.toJson(_))
       } yield (page, value)
     }
 

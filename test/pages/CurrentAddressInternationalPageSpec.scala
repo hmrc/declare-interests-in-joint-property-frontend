@@ -16,17 +16,17 @@
 
 package pages
 
-import models.CurrentAddressInternational
+import models.InternationalAddress
 import pages.behaviours.PageBehaviours
 
 class CurrentAddressInternationalPageSpec extends PageBehaviours {
 
   "CurrentAddressInternationalPage" - {
 
-    beRetrievable[CurrentAddressInternational](CurrentAddressInternationalPage)
+    beRetrievable[InternationalAddress](CurrentAddressInternationalPage)
 
-    beSettable[CurrentAddressInternational](CurrentAddressInternationalPage)
+    beSettable[InternationalAddress](CurrentAddressInternationalPage)
 
-    beRemovable[CurrentAddressInternational](CurrentAddressInternationalPage)
+    beRemovable[InternationalAddress](CurrentAddressInternationalPage)
   }
 }

@@ -17,6 +17,9 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import models.Country
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class CurrentAddressInternationalFormProviderSpec extends StringFieldBehaviours {
@@ -53,8 +56,28 @@ class CurrentAddressInternationalFormProviderSpec extends StringFieldBehaviours 
   ".line2" - {
 
     val fieldName = "line2"
-    val requiredKey = "currentAddressInternational.error.line2.required"
     val lengthKey = "currentAddressInternational.error.line2.length"
+    val maxLength = 100
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+  }
+
+  ".town" - {
+
+    val fieldName = "town"
+    val requiredKey = "currentAddressInternational.error.town.required"
+    val lengthKey = "currentAddressInternational.error.town.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -75,5 +98,74 @@ class CurrentAddressInternationalFormProviderSpec extends StringFieldBehaviours 
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+  }
+
+  ".state" - {
+
+    val fieldName = "state"
+    val lengthKey = "currentAddressInternational.error.state.length"
+    val maxLength = 100
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+  }
+
+  ".postcode" - {
+
+    val fieldName = "postcode"
+    val lengthKey = "currentAddressInternational.error.postcode.length"
+    val maxLength = 100
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+  }
+
+  ".country" - {
+
+    val fieldName = "country"
+    val requiredKey = "currentAddressInternational.error.country.required"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      Gen.oneOf(Country.internationalCountries.map(_.code))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+
+    "must not bind any values other than valid country codes" in {
+
+      val invalidAnswers = arbitrary[String] suchThat (x => !Country.internationalCountries.map(_.code).contains(x))
+
+      forAll(invalidAnswers) {
+        answer =>
+          val result = form.bind(Map("value" -> answer)).apply(fieldName)
+          result.errors must contain only FormError(fieldName, requiredKey)
+      }
+    }
   }
 }

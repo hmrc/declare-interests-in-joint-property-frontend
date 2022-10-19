@@ -16,16 +16,16 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import models.{Address, UkAddress}
 import play.api.data.Form
 import play.api.data.Forms._
-import models.Address
+
+import javax.inject.Inject
 
 class CurrentAddressUkFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Address] = Form(
+  def apply(): Form[UkAddress] = Form(
     mapping(
       "line1" -> text("currentAddressUk.error.line1.required")
         .verifying(maxLength(100, "currentAddressUk.error.line1.length")),
@@ -37,6 +37,6 @@ class CurrentAddressUkFormProvider @Inject() extends Mappings {
         .verifying(maxLength(100, "currentAddressUk.error.county.length"))),
       "postcode" -> text("currentAddressUk.error.postcode.required")
         .verifying(maxLength(100, "currentAddressUk.error.postcode.length"))
-    )(Address.apply)(Address.unapply)
+    )(UkAddress.apply)(UkAddress.unapply)
   )
 }

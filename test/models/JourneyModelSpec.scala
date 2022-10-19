@@ -35,17 +35,18 @@ class JourneyModelSpec
     with OptionValues
     with ModelGenerators {
 
-  private val applicantName    = arbitrary[Name].sample.value
-  private val applicantNino    = arbitrary[Nino].sample.value
-  private val applicantUtr     = arbitrary[Utr].sample.value
-  private val partnerName      = arbitrary[Name].sample.value
-  private val partnerNino      = arbitrary[Nino].sample.value
-  private val partnerUtr       = arbitrary[Utr].sample.value
-  private val currentAddressUk   = arbitrary[Address].sample.value
-  private val propertyAddress1 = arbitrary[Address].sample.value
-  private val propertyAddress2 = arbitrary[Address].sample.value
-  private val shareOfProperty1 = Gen.choose(1, 99).sample.value
-  private val shareOfProperty2 = Gen.choose(1, 99).sample.value
+  private val applicantName               = arbitrary[Name].sample.value
+  private val applicantNino               = arbitrary[Nino].sample.value
+  private val applicantUtr                = arbitrary[Utr].sample.value
+  private val partnerName                 = arbitrary[Name].sample.value
+  private val partnerNino                 = arbitrary[Nino].sample.value
+  private val partnerUtr                  = arbitrary[Utr].sample.value
+  private val currentAddressUk            = arbitrary[UkAddress].sample.value
+  private val currentAddressInternational = arbitrary[InternationalAddress].sample.value
+  private val propertyAddress1            = arbitrary[UkAddress].sample.value
+  private val propertyAddress2            = arbitrary[UkAddress].sample.value
+  private val shareOfProperty1            = Gen.choose(1, 99).sample.value
+  private val shareOfProperty2            = Gen.choose(1, 99).sample.value
 
   ".from" - {
 
@@ -60,6 +61,7 @@ class JourneyModelSpec
           .set(PartnerNamePage, partnerName).success.value
           .set(PartnerNinoPage, partnerNino).success.value
           .set(PartnerHasUtrPage, false).success.value
+          .set(CurrentAddressInUkPage, true).success.value
           .set(CurrentAddressUkPage, currentAddressUk).success.value
           .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
           .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
@@ -99,6 +101,7 @@ class JourneyModelSpec
           .set(PartnerNinoPage, partnerNino).success.value
           .set(PartnerHasUtrPage, true).success.value
           .set(PartnerUtrPage, partnerUtr).success.value
+          .set(CurrentAddressInUkPage, true).success.value
           .set(CurrentAddressUkPage, currentAddressUk).success.value
           .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
           .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
@@ -128,6 +131,44 @@ class JourneyModelSpec
         errors mustBe empty
         data.value mustEqual expectedModel
       }
+
+      "when the user's address is international" in {
+
+        val answers = UserAnswers("id")
+          .set(ApplicantNamePage, applicantName).success.value
+          .set(ApplicantNinoPage, applicantNino).success.value
+          .set(ApplicantHasUtrPage, false).success.value
+          .set(PartnerNamePage, partnerName).success.value
+          .set(PartnerNinoPage, partnerNino).success.value
+          .set(PartnerHasUtrPage, false).success.value
+          .set(CurrentAddressInUkPage, false).success.value
+          .set(CurrentAddressInternationalPage, currentAddressInternational).success.value
+          .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
+          .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
+
+        val expectedModel = JourneyModel(
+          applicant = JourneyModel.Applicant(
+            name = applicantName,
+            nino = applicantNino,
+            utr = None,
+            address = currentAddressInternational
+          ),
+          partner = JourneyModel.Partner(
+            name = partnerName,
+            nino = partnerNino,
+            utr = None
+          ),
+          properties = NonEmptyList(
+            head = Property(propertyAddress1, shareOfProperty1),
+            tail = Nil
+          )
+        )
+
+        val (errors, data) = JourneyModel.from(answers).pad
+
+        errors mustBe empty
+        data.value mustEqual expectedModel
+      }
     }
 
     "must fail and report the missing pages" - {
@@ -140,7 +181,7 @@ class JourneyModelSpec
           ApplicantNamePage,
           ApplicantNinoPage,
           ApplicantHasUtrPage,
-          CurrentAddressUkPage,
+          CurrentAddressInUkPage,
           PartnerNamePage,
           PartnerNinoPage,
           PartnerHasUtrPage,
@@ -157,6 +198,7 @@ class JourneyModelSpec
           .set(PartnerNamePage, partnerName).success.value
           .set(PartnerNinoPage, partnerNino).success.value
           .set(PartnerHasUtrPage, false).success.value
+          .set(CurrentAddressInUkPage, true).success.value
           .set(CurrentAddressUkPage, currentAddressUk).success.value
           .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
           .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
@@ -175,6 +217,7 @@ class JourneyModelSpec
           .set(PartnerNamePage, partnerName).success.value
           .set(PartnerNinoPage, partnerNino).success.value
           .set(PartnerHasUtrPage, true).success.value
+          .set(CurrentAddressInUkPage, true).success.value
           .set(CurrentAddressUkPage, currentAddressUk).success.value
           .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
           .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
@@ -182,6 +225,42 @@ class JourneyModelSpec
         val (errors, _) = JourneyModel.from(answers).pad
 
         errors.value.toChain.toList must contain only PartnerUtrPage
+      }
+
+      "when the user said their address is in the UK and no UK address is provided" in {
+
+        val answers = UserAnswers("id")
+          .set(ApplicantNamePage, applicantName).success.value
+          .set(ApplicantNinoPage, applicantNino).success.value
+          .set(ApplicantHasUtrPage, false).success.value
+          .set(PartnerNamePage, partnerName).success.value
+          .set(PartnerNinoPage, partnerNino).success.value
+          .set(PartnerHasUtrPage, false).success.value
+          .set(CurrentAddressInUkPage, true).success.value
+          .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
+          .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
+
+        val (errors, _) = JourneyModel.from(answers).pad
+
+        errors.value.toChain.toList must contain only CurrentAddressUkPage
+      }
+
+      "when the user said their address is not in the UK and no international address is provided" in {
+
+        val answers = UserAnswers("id")
+          .set(ApplicantNamePage, applicantName).success.value
+          .set(ApplicantNinoPage, applicantNino).success.value
+          .set(ApplicantHasUtrPage, false).success.value
+          .set(PartnerNamePage, partnerName).success.value
+          .set(PartnerNinoPage, partnerNino).success.value
+          .set(PartnerHasUtrPage, false).success.value
+          .set(CurrentAddressInUkPage, false).success.value
+          .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
+          .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
+
+        val (errors, _) = JourneyModel.from(answers).pad
+
+        errors.value.toChain.toList must contain only CurrentAddressInternationalPage
       }
 
       "when no properties are present" in {
@@ -193,6 +272,7 @@ class JourneyModelSpec
           .set(PartnerNamePage, partnerName).success.value
           .set(PartnerNinoPage, partnerNino).success.value
           .set(PartnerHasUtrPage, false).success.value
+          .set(CurrentAddressInUkPage, true).success.value
           .set(CurrentAddressUkPage, currentAddressUk).success.value
 
         val (errors, _) = JourneyModel.from(answers).pad

@@ -17,8 +17,8 @@
 package audit
 
 import audit.DownloadAuditEvent._
-import models.JourneyModel
-import play.api.libs.json.{Format, Json}
+import models.{Country, JourneyModel}
+import play.api.libs.json.{Json, Writes}
 
 final case class DownloadAuditEvent(applicant: Applicant, partner: Partner, properties: List[Property])
 
@@ -40,14 +40,31 @@ object DownloadAuditEvent {
       properties = model.properties.toList.map(convertProperty)
     )
 
-  private def convertAddress(address: models.Address): Address =
-    Address(
-      line1      = address.line1,
-      line2      = address.line2,
+  private def convertUkAddress(address: models.UkAddress): UkAddress =
+    UkAddress(
+      line1 = address.line1,
+      line2 = address.line2,
       townOrCity = address.townOrCity,
-      county     = address.county,
-      postcode   = address.postcode
+      county = address.county,
+      postcode = address.postcode
     )
+
+  private def convertInternationalAddress(address: models.InternationalAddress): InternationalAddress =
+    InternationalAddress(
+      line1 = address.line1,
+      line2 = address.line2,
+      townOrCity = address.townOrCity,
+      stateOrRegion = address.stateOrRegion,
+      postcode = address.postcode,
+      country = address.country
+    )
+
+  private def convertAddress(address: models.Address): Address = {
+    address match {
+      case u: models.UkAddress => convertUkAddress(u)
+      case i: models.InternationalAddress => convertInternationalAddress(i)
+    }
+  }
 
   private def convertProperty(property: models.Property): Property =
     Property(
@@ -55,30 +72,45 @@ object DownloadAuditEvent {
       applicantShare = property.applicantShare
     )
 
+  private[audit] sealed trait Address
+  object Address {
+    implicit val writes: Writes[Address] = Writes {
+      case u: UkAddress => Json.toJson(u)(UkAddress.writes)
+      case i: InternationalAddress => Json.toJson(i)(InternationalAddress.writes)
+    }
+  }
+
+  private[audit] final case class UkAddress(line1: String, line2: Option[String], townOrCity: String, county: Option[String], postcode: String) extends Address
+
+  object UkAddress {
+    implicit lazy val writes: Writes[UkAddress] = Json.writes
+  }
+
+  private[audit] final case class InternationalAddress(line1: String, line2: Option[String], townOrCity: String, stateOrRegion: Option[String], postcode: Option[String], country: Country) extends Address
+
+  object InternationalAddress {
+    implicit lazy val writes: Writes[InternationalAddress] = Json.writes
+  }
+
   private[audit] final case class Applicant(name: Name, nino: String, utr: Option[String], address: Address)
   object Applicant {
-    implicit lazy val formats: Format[Applicant] = Json.format
+    implicit lazy val writes: Writes[Applicant] = Json.writes
   }
 
   private[audit] final case class Partner(name: Name, nino: String, utr: Option[String])
   object Partner {
-    implicit lazy val formats: Format[Partner] = Json.format
+    implicit lazy val writes: Writes[Partner] = Json.writes
   }
 
   private[audit] final case class Name(firstName: String, lastName: String)
   object Name {
-    implicit lazy val formats: Format[Name] = Json.format
-  }
-
-  private[audit] final case class Address(line1: String, line2: Option[String], townOrCity: String, county: Option[String], postcode: String)
-  object Address {
-    implicit lazy val formats: Format[Address] = Json.format
+    implicit lazy val writes: Writes[Name] = Json.writes
   }
 
   private[audit] final case class Property(address: Address, applicantShare: Int)
   object Property {
-    implicit lazy val formats: Format[Property] = Json.format
+    implicit lazy val writes: Writes[Property] = Json.writes
   }
 
-  implicit lazy val formats: Format[DownloadAuditEvent] = Json.format
+  implicit lazy val writes: Writes[DownloadAuditEvent] = Json.writes
 }

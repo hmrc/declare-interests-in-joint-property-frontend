@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.CurrentAddressUkFormProvider
-import models.{Address, NormalMode}
+import models.{NormalMode, UkAddress}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -41,7 +41,7 @@ class CurrentAddressUkControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   lazy val currentAddressUkRoute = routes.CurrentAddressUkController.onPageLoad(NormalMode).url
-  private val validAnswer = Address("line1", None, "town", None, "postcode")
+  private val validAnswer = UkAddress("line1", None, "town", None, "postcode")
 
   val userAnswers = emptyUserAnswers.set(CurrentAddressUkPage, validAnswer).success.value
 
