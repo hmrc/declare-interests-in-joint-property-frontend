@@ -32,11 +32,11 @@ object PartnerNameSummary  {
     answers.get(PartnerNamePage).map {
       answer =>
 
-      val value = HtmlFormat.escape(answer.firstName).toString + "<br/>" + HtmlFormat.escape(answer.lastName).toString
+        val value = s"${answer.firstName} ${answer.lastName}"
 
         SummaryListRowViewModel(
           key     = "partnerName.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlContent(value)),
+          value   = ValueViewModel(value),
           actions = Seq(
             ActionItemViewModel("site.change", routes.PartnerNameController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText(messages("partnerName.change.hidden"))
