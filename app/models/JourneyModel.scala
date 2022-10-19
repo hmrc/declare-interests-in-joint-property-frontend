@@ -54,7 +54,7 @@ object JourneyModel {
       answers.getIor(ApplicantNamePage),
       answers.getIor(ApplicantNinoPage),
       getApplicantUtr(answers),
-      answers.getIor(CurrentAddressPage)
+      answers.getIor(CurrentAddressUkPage)
       ).parMapN(Applicant.apply)
 
   private def getPartner(answers: UserAnswers): IorNec[Query, Partner] =

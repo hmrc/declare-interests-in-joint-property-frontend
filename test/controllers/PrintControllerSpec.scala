@@ -43,7 +43,7 @@ class PrintControllerSpec extends SpecBase with ModelGenerators with MockitoSuga
   private val partnerName      = arbitrary[Name].sample.value
   private val partnerNino      = arbitrary[Nino].sample.value
   private val partnerUtr       = arbitrary[Utr].sample.value
-  private val currentAddress   = arbitrary[Address].sample.value
+  private val currentAddressUk   = arbitrary[Address].sample.value
   private val propertyAddress1 = arbitrary[Address].sample.value
   private val propertyAddress2 = arbitrary[Address].sample.value
   private val shareOfProperty1 = Gen.choose(1, 99).sample.value
@@ -58,7 +58,7 @@ class PrintControllerSpec extends SpecBase with ModelGenerators with MockitoSuga
     .set(PartnerNinoPage, partnerNino).success.value
     .set(PartnerHasUtrPage, true).success.value
     .set(PartnerUtrPage, partnerUtr).success.value
-    .set(CurrentAddressPage, currentAddress).success.value
+    .set(CurrentAddressUkPage, currentAddressUk).success.value
     .set(PropertyAddressPage(Index(0)), propertyAddress1).success.value
     .set(ShareOfPropertyPage(Index(0)), shareOfProperty1).success.value
     .set(PropertyAddressPage(Index(1)), propertyAddress2).success.value

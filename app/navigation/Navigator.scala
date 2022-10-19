@@ -34,8 +34,8 @@ class Navigator @Inject()() {
     case PartnerNamePage            => _ => routes.PartnerNinoController.onPageLoad(NormalMode)
     case PartnerNinoPage            => _ => routes.PartnerHasUtrController.onPageLoad(NormalMode)
     case PartnerHasUtrPage          => partnerHasUtrRoute
-    case PartnerUtrPage             => _ => routes.CurrentAddressController.onPageLoad(NormalMode)
-    case CurrentAddressPage         => _ => routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+    case PartnerUtrPage             => _ => routes.CurrentAddressUkController.onPageLoad(NormalMode)
+    case CurrentAddressUkPage       => _ => routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
     case PropertyAddressPage(index) => _ => routes.ShareOfPropertyController.onPageLoad(NormalMode, index)
     case ShareOfPropertyPage(index) => _ => routes.CheckPropertyController.onPageLoad(index)
     case CheckPropertyPage(_)       => _ => routes.AddPropertyController.onPageLoad(NormalMode)
@@ -53,7 +53,7 @@ class Navigator @Inject()() {
   private def partnerHasUtrRoute(answers: UserAnswers): Call =
     answers.get(PartnerHasUtrPage).map {
       case true  => routes.PartnerUtrController.onPageLoad(NormalMode)
-      case false => routes.CurrentAddressController.onPageLoad(NormalMode)
+      case false => routes.CurrentAddressUkController.onPageLoad(NormalMode)
     }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
 
   private def addPropertyRoute(answers: UserAnswers): Call =

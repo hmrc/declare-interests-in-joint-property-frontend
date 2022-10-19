@@ -40,8 +40,8 @@ trait PageGenerators {
   implicit lazy val arbitraryPartnerHasUtrPage: Arbitrary[PartnerHasUtrPage.type] =
     Arbitrary(PartnerHasUtrPage)
 
-  implicit lazy val arbitraryCurrentAddressPage: Arbitrary[CurrentAddressPage.type] =
-    Arbitrary(CurrentAddressPage)
+  implicit lazy val arbitraryCurrentAddressPage: Arbitrary[CurrentAddressUkPage.type] =
+    Arbitrary(CurrentAddressUkPage)
 
   implicit lazy val arbitraryApplicantUtrPage: Arbitrary[ApplicantUtrPage.type] =
     Arbitrary(ApplicantUtrPage)

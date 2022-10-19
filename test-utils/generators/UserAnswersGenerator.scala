@@ -33,7 +33,7 @@ trait UserAnswersGenerator extends TryValues {
     arbitrary[(PartnerNinoPage.type, JsValue)] ::
     arbitrary[(PartnerNamePage.type, JsValue)] ::
     arbitrary[(PartnerHasUtrPage.type, JsValue)] ::
-    arbitrary[(CurrentAddressPage.type, JsValue)] ::
+    arbitrary[(CurrentAddressUkPage.type, JsValue)] ::
     arbitrary[(ApplicantUtrPage.type, JsValue)] ::
     arbitrary[(ApplicantNinoPage.type, JsValue)] ::
     arbitrary[(ApplicantNamePage.type, JsValue)] ::

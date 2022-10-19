@@ -45,10 +45,10 @@ POST       /your-unique-taxpayer-reference                        controllers.Ap
 GET        /change-your-unique-taxpayer-reference      controllers.ApplicantUtrController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-your-unique-taxpayer-reference      controllers.ApplicantUtrController.onSubmit(mode: Mode = CheckMode)
 
-GET        /current-address                        controllers.CurrentAddressController.onPageLoad(mode: Mode = NormalMode)
-POST       /current-address                        controllers.CurrentAddressController.onSubmit(mode: Mode = NormalMode)
-GET        /change-current-address                  controllers.CurrentAddressController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-current-address                  controllers.CurrentAddressController.onSubmit(mode: Mode = CheckMode)
+GET        /current-uk-address                        controllers.CurrentAddressUkController.onPageLoad(mode: Mode = NormalMode)
+POST       /current-uk-address                        controllers.CurrentAddressUkController.onSubmit(mode: Mode = NormalMode)
+GET        /change-current-uk-address                  controllers.CurrentAddressUkController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-current-uk-address                  controllers.CurrentAddressUkController.onSubmit(mode: Mode = CheckMode)
 
 GET        /partner-has-unique-taxpayer-reference                        controllers.PartnerHasUtrController.onPageLoad(mode: Mode = NormalMode)
 POST       /partner-has-unique-taxpayer-reference                        controllers.PartnerHasUtrController.onSubmit(mode: Mode = NormalMode)

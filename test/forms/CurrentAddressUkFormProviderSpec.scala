@@ -19,15 +19,15 @@ package forms
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
-class CurrentAddressFormProviderSpec extends StringFieldBehaviours {
+class CurrentAddressUkFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new CurrentAddressFormProvider()()
+  val form = new CurrentAddressUkFormProvider()()
 
   ".line1" - {
 
     val fieldName = "line1"
-    val requiredKey = "currentAddress.error.line1.required"
-    val lengthKey = "currentAddress.error.line1.length"
+    val requiredKey = "currentAddressUk.error.line1.required"
+    val lengthKey = "currentAddressUk.error.line1.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -53,7 +53,7 @@ class CurrentAddressFormProviderSpec extends StringFieldBehaviours {
   ".line2" - {
 
     val fieldName = "line2"
-    val lengthKey = "currentAddress.error.line2.length"
+    val lengthKey = "currentAddressUk.error.line2.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -73,8 +73,8 @@ class CurrentAddressFormProviderSpec extends StringFieldBehaviours {
   ".townOrCity" - {
 
     val fieldName = "townOrCity"
-    val requiredKey = "currentAddress.error.townOrCity.required"
-    val lengthKey = "currentAddress.error.townOrCity.length"
+    val requiredKey = "currentAddressUk.error.townOrCity.required"
+    val lengthKey = "currentAddressUk.error.townOrCity.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -100,7 +100,7 @@ class CurrentAddressFormProviderSpec extends StringFieldBehaviours {
   ".county" - {
 
     val fieldName = "county"
-    val lengthKey = "currentAddress.error.county.length"
+    val lengthKey = "currentAddressUk.error.county.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
@@ -120,8 +120,8 @@ class CurrentAddressFormProviderSpec extends StringFieldBehaviours {
   ".postcode" - {
 
     val fieldName = "postcode"
-    val requiredKey = "currentAddress.error.postcode.required"
-    val lengthKey = "currentAddress.error.postcode.length"
+    val requiredKey = "currentAddressUk.error.postcode.required"
+    val lengthKey = "currentAddressUk.error.postcode.length"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(

@@ -17,29 +17,29 @@
 package controllers
 
 import controllers.actions._
-import forms.CurrentAddressFormProvider
+import forms.CurrentAddressUkFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.CurrentAddressPage
+import pages.CurrentAddressUkPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CurrentAddressView
+import views.html.CurrentAddressUkView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CurrentAddressController @Inject()(
-                                      override val messagesApi: MessagesApi,
-                                      sessionRepository: SessionRepository,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: CurrentAddressFormProvider,
-                                      val controllerComponents: MessagesControllerComponents,
-                                      view: CurrentAddressView
+class CurrentAddressUkController @Inject()(
+                                            override val messagesApi: MessagesApi,
+                                            sessionRepository: SessionRepository,
+                                            navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            formProvider: CurrentAddressUkFormProvider,
+                                            val controllerComponents: MessagesControllerComponents,
+                                            view: CurrentAddressUkView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
@@ -47,7 +47,7 @@ class CurrentAddressController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(CurrentAddressPage) match {
+      val preparedForm = request.userAnswers.get(CurrentAddressUkPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -64,9 +64,9 @@ class CurrentAddressController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CurrentAddressPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CurrentAddressUkPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CurrentAddressPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CurrentAddressUkPage, mode, updatedAnswers))
       )
   }
 }

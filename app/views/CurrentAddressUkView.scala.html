@@ -26,20 +26,20 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("currentAddress.title"))) {
+@layout(pageTitle = title(form, messages("currentAddressUk.title"))) {
 
-    @formHelper(action = routes.CurrentAddressController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.CurrentAddressUkController.onSubmit(mode), 'autoComplete -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        <h1 class="govuk-heading-xl">@messages("currentAddress.heading")</h1>
+        <h1 class="govuk-heading-xl">@messages("currentAddressUk.heading")</h1>
 
         @govukInput(
             InputViewModel(
                 field = form("line1"),
-                label = LabelViewModel(messages("currentAddress.line1"))
+                label = LabelViewModel(messages("currentAddressUk.line1"))
             )
             .withWidth(Full)
             .withAutocomplete("address-line1")
@@ -48,7 +48,7 @@
         @govukInput(
             InputViewModel(
                 field = form("line2"),
-                label = LabelViewModel(messages("currentAddress.line2"))
+                label = LabelViewModel(messages("currentAddressUk.line2"))
             )
             .withWidth(Full)
             .withAutocomplete("address-line2")
@@ -57,7 +57,7 @@
         @govukInput(
             InputViewModel(
                 field = form("townOrCity"),
-                label = LabelViewModel(messages("currentAddress.townOrCity"))
+                label = LabelViewModel(messages("currentAddressUk.townOrCity"))
             )
             .withWidth(Full)
             .withAutocomplete("address-level2")
@@ -66,7 +66,7 @@
         @govukInput(
             InputViewModel(
                 field = form("county"),
-                label = LabelViewModel(messages("currentAddress.county"))
+                label = LabelViewModel(messages("currentAddressUk.county"))
             )
             .withWidth(TwoThirds)
         )
@@ -74,7 +74,7 @@
         @govukInput(
             InputViewModel(
                 field = form("postcode"),
-                label = LabelViewModel(messages("currentAddress.postcode"))
+                label = LabelViewModel(messages("currentAddressUk.postcode"))
             )
             .withWidth(Fixed10)
             .withAutocomplete("postal-code")

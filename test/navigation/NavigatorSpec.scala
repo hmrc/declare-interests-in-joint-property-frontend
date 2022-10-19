@@ -81,17 +81,17 @@ class NavigatorSpec extends SpecBase {
       "must go from Partner Has UTR to Current Address when the answer is no" in {
 
         val answers = emptyUserAnswers.set(PartnerHasUtrPage, false).success.value
-        navigator.nextPage(PartnerHasUtrPage, NormalMode, answers) mustBe routes.CurrentAddressController.onPageLoad(NormalMode)
+        navigator.nextPage(PartnerHasUtrPage, NormalMode, answers) mustBe routes.CurrentAddressUkController.onPageLoad(NormalMode)
       }
 
       "must go from Partner UTR to Current Address" in {
 
-        navigator.nextPage(PartnerUtrPage, NormalMode, emptyUserAnswers) mustBe routes.CurrentAddressController.onPageLoad(NormalMode)
+        navigator.nextPage(PartnerUtrPage, NormalMode, emptyUserAnswers) mustBe routes.CurrentAddressUkController.onPageLoad(NormalMode)
       }
 
       "must go from Current Address to Property Address for index 0" in {
 
-        navigator.nextPage(CurrentAddressPage, NormalMode, emptyUserAnswers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+        navigator.nextPage(CurrentAddressUkPage, NormalMode, emptyUserAnswers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
       }
 
       "must go from Property Address to Share of Property for the same index" in {
@@ -231,7 +231,7 @@ class NavigatorSpec extends SpecBase {
 
       "must go from Current Address to Check Answers" in {
 
-        navigator.nextPage(CurrentAddressPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+        navigator.nextPage(CurrentAddressUkPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
       }
 
       "must go from Property Address to Check Property" in {

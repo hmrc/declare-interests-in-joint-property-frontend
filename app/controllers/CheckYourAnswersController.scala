@@ -43,7 +43,7 @@ class CheckYourAnswersController @Inject()(
           ApplicantNinoSummary.row(request.userAnswers),
           ApplicantHasUtrSummary.row(request.userAnswers),
           ApplicantUtrSummary.row(request.userAnswers),
-          CurrentAddressSummary.row(request.userAnswers)
+          CurrentAddressUkSummary.row(request.userAnswers)
         ).flatten
       )
 
