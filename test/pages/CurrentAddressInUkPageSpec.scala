@@ -16,9 +16,12 @@
 
 package pages
 
+import generators.ModelGenerators
+import models.{InternationalAddress, UkAddress}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
-class CurrentAddressInUkPageSpec extends PageBehaviours {
+class CurrentAddressInUkPageSpec extends PageBehaviours with ModelGenerators {
 
   "CurrentAddressInUkPage" - {
 
@@ -27,5 +30,31 @@ class CurrentAddressInUkPageSpec extends PageBehaviours {
     beSettable[Boolean](CurrentAddressInUkPage)
 
     beRemovable[Boolean](CurrentAddressInUkPage)
+
+    "must delete current UK address when the answer is no" in {
+
+      val answers =
+        emptyUserAnswers
+          .set(CurrentAddressUkPage, arbitrary[UkAddress].sample.value).success.value
+          .set(CurrentAddressInternationalPage, arbitrary[InternationalAddress].sample.value).success.value
+
+      val result = answers.set(CurrentAddressInUkPage, false).success.value
+
+      result.get(CurrentAddressUkPage) must not be defined
+      result.get(CurrentAddressInternationalPage) mustBe defined
+    }
+
+    "must delete current international address when the answer is yes" in {
+
+      val answers =
+        emptyUserAnswers
+          .set(CurrentAddressUkPage, arbitrary[UkAddress].sample.value).success.value
+          .set(CurrentAddressInternationalPage, arbitrary[InternationalAddress].sample.value).success.value
+
+      val result = answers.set(CurrentAddressInUkPage, true).success.value
+
+      result.get(CurrentAddressUkPage) mustBe defined
+      result.get(CurrentAddressInternationalPage) must not be defined
+    }
   }
 }
