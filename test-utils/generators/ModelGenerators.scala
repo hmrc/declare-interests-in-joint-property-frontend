@@ -23,6 +23,14 @@ import uk.gov.hmrc.domain.Nino
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryCurrentAddressInternational: Arbitrary[CurrentAddressInternational] =
+    Arbitrary {
+      for {
+        line1 <- arbitrary[String]
+        line2 <- arbitrary[String]
+      } yield CurrentAddressInternational(line1, line2)
+    }
+
   implicit lazy val arbitraryUtr: Arbitrary[Utr] = Arbitrary {
     for {
       prefix    <- Gen.option("k").map(_.getOrElse(""))

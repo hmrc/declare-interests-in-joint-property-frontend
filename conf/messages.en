@@ -245,3 +245,20 @@ print.documentsToPost.guidance = For each property post evidence that your benef
 print.button = Download form
 
 pdf.title = Declare beneficial interests in joint property
+currentAddressInUk.title = currentAddressInUk
+currentAddressInUk.heading = currentAddressInUk
+currentAddressInUk.checkYourAnswersLabel = currentAddressInUk
+currentAddressInUk.error.required = Select yes if currentAddressInUk
+currentAddressInUk.change.hidden = CurrentAddressInUk
+
+currentAddressInternational.title = currentAddressInternational
+currentAddressInternational.heading = currentAddressInternational
+currentAddressInternational.line1 = line1
+currentAddressInternational.line2 = line2
+currentAddressInternational.checkYourAnswersLabel = CurrentAddressInternational
+currentAddressInternational.error.line1.required = Enter line1
+currentAddressInternational.error.line2.required = Enter line2
+currentAddressInternational.error.line1.length = line1 must be 100 characters or less
+currentAddressInternational.error.line2.length = line2 must be 100 characters or less
+currentAddressInternational.line1.change.hidden = line1
+currentAddressInternational.line2.change.hidden = line2

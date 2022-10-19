@@ -90,3 +90,13 @@ POST        /check-property/:index                      controllers.CheckPropert
 
 GET        /print-form                         controllers.PrintController.onDownload
 GET        /next-steps                         controllers.PrintController.onPageLoad
+
+GET        /currentAddressInUk                        controllers.CurrentAddressInUkController.onPageLoad(mode: Mode = NormalMode)
+POST       /currentAddressInUk                        controllers.CurrentAddressInUkController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCurrentAddressInUk                  controllers.CurrentAddressInUkController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCurrentAddressInUk                  controllers.CurrentAddressInUkController.onSubmit(mode: Mode = CheckMode)
+
+GET        /currentAddressInternational                        controllers.CurrentAddressInternationalController.onPageLoad(mode: Mode = NormalMode)
+POST       /currentAddressInternational                        controllers.CurrentAddressInternationalController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCurrentAddressInternational                  controllers.CurrentAddressInternationalController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCurrentAddressInternational                  controllers.CurrentAddressInternationalController.onSubmit(mode: Mode = CheckMode)

@@ -25,6 +25,22 @@ import uk.gov.hmrc.domain.Nino
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
+  implicit lazy val arbitraryCurrentAddressInternationalUserAnswersEntry: Arbitrary[(CurrentAddressInternationalPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CurrentAddressInternationalPage.type]
+        value <- arbitrary[CurrentAddressInternational].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryCurrentAddressInUkUserAnswersEntry: Arbitrary[(CurrentAddressInUkPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CurrentAddressInUkPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryShareOfPropertyUserAnswersEntry: Arbitrary[(ShareOfPropertyPage, JsValue)] =
     Arbitrary {
       for {

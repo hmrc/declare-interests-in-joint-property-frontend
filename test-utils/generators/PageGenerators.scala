@@ -22,6 +22,12 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryCurrentAddressInternationalPage: Arbitrary[CurrentAddressInternationalPage.type] =
+    Arbitrary(CurrentAddressInternationalPage)
+
+  implicit lazy val arbitraryCurrentAddressInUkPage: Arbitrary[CurrentAddressInUkPage.type] =
+    Arbitrary(CurrentAddressInUkPage)
+
   implicit lazy val arbitraryShareOfPropertyPage: Arbitrary[ShareOfPropertyPage] =
     Arbitrary(ShareOfPropertyPage(Index(0)))
 
