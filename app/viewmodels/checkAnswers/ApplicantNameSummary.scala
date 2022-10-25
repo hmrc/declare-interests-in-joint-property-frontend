@@ -32,11 +32,11 @@ object ApplicantNameSummary  {
     answers.get(ApplicantNamePage).map {
       answer =>
 
-      val value = HtmlFormat.escape(answer.firstName).toString + "<br/>" + HtmlFormat.escape(answer.lastName).toString
+      val value = s"${answer.firstName} ${answer.lastName}"
 
         SummaryListRowViewModel(
           key     = "applicantName.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlContent(value)),
+          value   = ValueViewModel(value),
           actions = Seq(
             ActionItemViewModel("site.change", routes.ApplicantNameController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText(messages("applicantName.change.hidden"))

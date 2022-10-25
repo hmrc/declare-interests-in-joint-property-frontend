@@ -16,17 +16,20 @@
 
 package pages
 
-import models.Address
-import pages.behaviours.PageBehaviours
+import models.UserAnswers
+import play.api.libs.json.JsPath
 
-class CurrentAddressPageSpec extends PageBehaviours {
+import scala.util.Try
 
-  "CurrentAddressPage" - {
+case object CurrentAddressInUkPage extends QuestionPage[Boolean] {
 
-    beRetrievable[Address](CurrentAddressPage)
+  override def path: JsPath = JsPath \ toString
 
-    beSettable[Address](CurrentAddressPage)
+  override def toString: String = "currentAddressInUk"
 
-    beRemovable[Address](CurrentAddressPage)
-  }
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value.map {
+      case true  => userAnswers.remove(CurrentAddressInternationalPage)
+      case false => userAnswers.remove(CurrentAddressUkPage)
+    }.getOrElse(super.cleanup(value, userAnswers))
 }

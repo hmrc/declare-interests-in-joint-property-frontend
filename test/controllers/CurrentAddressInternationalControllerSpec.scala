@@ -17,50 +17,50 @@
 package controllers
 
 import base.SpecBase
-import forms.PropertyAddressFormProvider
-import models.{Index, NormalMode, UkAddress}
+import forms.CurrentAddressInternationalFormProvider
+import models.{Country, InternationalAddress, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.PropertyAddressPage
+import pages.CurrentAddressInternationalPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.PropertyAddressView
+import views.html.CurrentAddressInternationalView
 
 import scala.concurrent.Future
 
-class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
+class CurrentAddressInternationalControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
-  val index = Index(0)
 
-  val formProvider = new PropertyAddressFormProvider()
+  val formProvider = new CurrentAddressInternationalFormProvider()
   val form = formProvider()
 
-  lazy val propertyAddressRoute = routes.PropertyAddressController.onPageLoad(NormalMode, index).url
-  private val validAnswer = UkAddress("line1", None, "town", None, "postcode")
+  lazy val currentAddressInternationalRoute = routes.CurrentAddressInternationalController.onPageLoad(NormalMode).url
 
-  val userAnswers = emptyUserAnswers.set(PropertyAddressPage(index), validAnswer).success.value
+  private val country = Country.internationalCountries.head
+  private val validAnswer = InternationalAddress("line1", None, "town", None, Some("postcode"), country)
+  val userAnswers = emptyUserAnswers.set(CurrentAddressInternationalPage, validAnswer).success.value
 
-  "PropertyAddress Controller" - {
+  "CurrentAddressInternational Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, propertyAddressRoute)
+        val request = FakeRequest(GET, currentAddressInternationalRoute)
 
-        val view = application.injector.instanceOf[PropertyAddressView]
+        val view = application.injector.instanceOf[CurrentAddressInternationalView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, index)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -69,14 +69,14 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, propertyAddressRoute)
+        val request = FakeRequest(GET, currentAddressInternationalRoute)
 
-        val view = application.injector.instanceOf[PropertyAddressView]
+        val view = application.injector.instanceOf[CurrentAddressInternationalView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode, index)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -96,8 +96,8 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, propertyAddressRoute)
-            .withFormUrlEncodedBody(("line1", "line 1"), ("townOrCity", "town"), ("postcode", "postcode"))
+          FakeRequest(POST, currentAddressInternationalRoute)
+            .withFormUrlEncodedBody(("line1", "line 1"), ("town", "town"), ("postcode", "postcode"), ("country", country.code))
 
         val result = route(application, request).value
 
@@ -112,17 +112,17 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, propertyAddressRoute)
+          FakeRequest(POST, currentAddressInternationalRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
-        val view = application.injector.instanceOf[PropertyAddressView]
+        val view = application.injector.instanceOf[CurrentAddressInternationalView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, index)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -131,7 +131,7 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, propertyAddressRoute)
+        val request = FakeRequest(GET, currentAddressInternationalRoute)
 
         val result = route(application, request).value
 
@@ -146,8 +146,8 @@ class PropertyAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, propertyAddressRoute)
-            .withFormUrlEncodedBody(("line1", "line 1"), ("townOrCity", "town"), ("postcode", "postcode"))
+          FakeRequest(POST, currentAddressInternationalRoute)
+            .withFormUrlEncodedBody(("line1", "line 1"), ("town", "town"), ("postcode", "postcode"), ("country", country.code))
 
         val result = route(application, request).value
 

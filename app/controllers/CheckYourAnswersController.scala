@@ -42,8 +42,7 @@ class CheckYourAnswersController @Inject()(
           ApplicantNameSummary.row(request.userAnswers),
           ApplicantNinoSummary.row(request.userAnswers),
           ApplicantHasUtrSummary.row(request.userAnswers),
-          ApplicantUtrSummary.row(request.userAnswers),
-          CurrentAddressSummary.row(request.userAnswers)
+          ApplicantUtrSummary.row(request.userAnswers)
         ).flatten
       )
 
@@ -52,7 +51,10 @@ class CheckYourAnswersController @Inject()(
           PartnerNameSummary.row(request.userAnswers),
           PartnerNinoSummary.row(request.userAnswers),
           PartnerHasUtrSummary.row(request.userAnswers),
-          PartnerUtrSummary.row(request.userAnswers)
+          PartnerUtrSummary.row(request.userAnswers),
+          CurrentAddressInUkSummary.row(request.userAnswers),
+          CurrentAddressUkSummary.row(request.userAnswers),
+          CurrentAddressInternationalSummary.row(request.userAnswers)
         ).flatten
       )
 

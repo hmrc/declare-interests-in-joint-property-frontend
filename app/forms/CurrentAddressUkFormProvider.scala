@@ -17,27 +17,26 @@
 package forms
 
 import forms.mappings.Mappings
-import models.UkAddress
+import models.{Address, UkAddress}
 import play.api.data.Form
 import play.api.data.Forms._
 
 import javax.inject.Inject
 
-class PropertyAddressFormProvider @Inject() extends Mappings {
-
+class CurrentAddressUkFormProvider @Inject() extends Mappings {
 
   def apply(): Form[UkAddress] = Form(
     mapping(
-      "line1" -> text("propertyAddress.error.line1.required")
-        .verifying(maxLength(100, "propertyAddress.error.line1.length")),
-      "line2" -> optional(text("propertyAddress.error.line2.required")
-        .verifying(maxLength(100, "propertyAddress.error.line2.length"))),
-      "townOrCity" -> text("propertyAddress.error.townOrCity.required")
-        .verifying(maxLength(100, "propertyAddress.error.townOrCity.length")),
-      "county" -> optional(text("propertyAddress.error.county.required")
-        .verifying(maxLength(100, "propertyAddress.error.county.length"))),
-      "postcode" -> text("propertyAddress.error.postcode.required")
-        .verifying(maxLength(100, "propertyAddress.error.postcode.length"))
+      "line1" -> text("currentAddressUk.error.line1.required")
+        .verifying(maxLength(100, "currentAddressUk.error.line1.length")),
+      "line2" -> optional(text("currentAddressUk.error.line2.required")
+        .verifying(maxLength(100, "currentAddressUk.error.line2.length"))),
+      "townOrCity" -> text("currentAddressUk.error.townOrCity.required")
+        .verifying(maxLength(100, "currentAddressUk.error.townOrCity.length")),
+      "county" -> optional(text("currentAddressUk.error.county.required")
+        .verifying(maxLength(100, "currentAddressUk.error.county.length"))),
+      "postcode" -> text("currentAddressUk.error.postcode.required")
+        .verifying(maxLength(100, "currentAddressUk.error.postcode.length"))
     )(UkAddress.apply)(UkAddress.unapply)
   )
 }

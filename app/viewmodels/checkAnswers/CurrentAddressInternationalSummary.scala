@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.PartnerNamePage
+import pages.CurrentAddressInternationalPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -26,20 +26,20 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object PartnerNameSummary  {
+object CurrentAddressInternationalSummary  {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerNamePage).map {
+    answers.get(CurrentAddressInternationalPage).map {
       answer =>
 
-        val value = s"${answer.firstName} ${answer.lastName}"
+        val value = answer.lines.map(HtmlFormat.escape).mkString("<br/>")
 
         SummaryListRowViewModel(
-          key     = "partnerName.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
+          key     = "currentAddressInternational.checkYourAnswersLabel",
+          value   = ValueViewModel(HtmlContent(value)),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.PartnerNameController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("partnerName.change.hidden"))
+            ActionItemViewModel("site.change", routes.CurrentAddressInternationalController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText(messages("currentAddressInternational.change.hidden"))
           )
         )
     }

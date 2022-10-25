@@ -23,6 +23,11 @@ import uk.gov.hmrc.domain.Nino
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryCountry: Arbitrary[Country] =
+    Arbitrary {
+      Gen.oneOf(Country.internationalCountries)
+    }
+
   implicit lazy val arbitraryUtr: Arbitrary[Utr] = Arbitrary {
     for {
       prefix    <- Gen.option("k").map(_.getOrElse(""))
@@ -41,15 +46,27 @@ trait ModelGenerators {
     } yield Nino(firstChar ++ secondChar ++ digits :+ lastChar)
   }
 
-  implicit lazy val arbitraryAddress: Arbitrary[Address] =
+  implicit lazy val arbitraryUkAddress: Arbitrary[UkAddress] =
     Arbitrary {
       for {
-        line1 <- arbitrary[String]
-        line2 <- Gen.option(arbitrary[String])
-        town <- arbitrary[String]
-        county <- Gen.option(arbitrary[String])
+        line1    <- arbitrary[String]
+        line2    <- Gen.option(arbitrary[String])
+        town     <- arbitrary[String]
+        county   <- Gen.option(arbitrary[String])
         postcode <- arbitrary[String]
-      } yield Address(line1, line2, town, county, postcode)
+      } yield UkAddress(line1, line2, town, county, postcode)
+    }
+
+  implicit lazy val arbitraryInternationalAddress: Arbitrary[InternationalAddress] =
+    Arbitrary {
+      for {
+        line1    <- arbitrary[String]
+        line2    <- Gen.option(arbitrary[String])
+        town     <- arbitrary[String]
+        state    <- Gen.option(arbitrary[String])
+        postcode <- Gen.option(arbitrary[String])
+        country  <- Gen.oneOf(Country.internationalCountries)
+      } yield InternationalAddress(line1, line2, town, state, postcode, country)
     }
 
   implicit lazy val arbitraryName: Arbitrary[Name] =

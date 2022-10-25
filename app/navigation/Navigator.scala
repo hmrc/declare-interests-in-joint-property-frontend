@@ -27,21 +27,23 @@ import queries.AllProperties
 class Navigator @Inject()() {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case ApplicantNamePage          => _ => routes.ApplicantNinoController.onPageLoad(NormalMode)
-    case ApplicantNinoPage          => _ => routes.ApplicantHasUtrController.onPageLoad(NormalMode)
-    case ApplicantHasUtrPage        => applicantHasUtrRoute
-    case ApplicantUtrPage           => _ => routes.PartnerNameController.onPageLoad(NormalMode)
-    case PartnerNamePage            => _ => routes.PartnerNinoController.onPageLoad(NormalMode)
-    case PartnerNinoPage            => _ => routes.PartnerHasUtrController.onPageLoad(NormalMode)
-    case PartnerHasUtrPage          => partnerHasUtrRoute
-    case PartnerUtrPage             => _ => routes.CurrentAddressController.onPageLoad(NormalMode)
-    case CurrentAddressPage         => _ => routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
-    case PropertyAddressPage(index) => _ => routes.ShareOfPropertyController.onPageLoad(NormalMode, index)
-    case ShareOfPropertyPage(index) => _ => routes.CheckPropertyController.onPageLoad(index)
-    case CheckPropertyPage(_)       => _ => routes.AddPropertyController.onPageLoad(NormalMode)
-    case AddPropertyPage            => addPropertyRoute
-    case RemovePropertyPage(_)      => removePropertyRoute
-    case _                          => _ => routes.IndexController.onPageLoad
+    case ApplicantNamePage               => _ => routes.ApplicantNinoController.onPageLoad(NormalMode)
+    case ApplicantNinoPage               => _ => routes.ApplicantHasUtrController.onPageLoad(NormalMode)
+    case ApplicantHasUtrPage             => applicantHasUtrRoute
+    case ApplicantUtrPage                => _ => routes.PartnerNameController.onPageLoad(NormalMode)
+    case PartnerNamePage                 => _ => routes.PartnerNinoController.onPageLoad(NormalMode)
+    case PartnerNinoPage                 => _ => routes.PartnerHasUtrController.onPageLoad(NormalMode)
+    case PartnerHasUtrPage               => partnerHasUtrRoute
+    case PartnerUtrPage                  => _ => routes.CurrentAddressInUkController.onPageLoad(NormalMode)
+    case CurrentAddressInUkPage          => currentAddressInUkRoute
+    case CurrentAddressUkPage            => _ => routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+    case CurrentAddressInternationalPage => _ => routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+    case PropertyAddressPage(index)      => _ => routes.ShareOfPropertyController.onPageLoad(NormalMode, index)
+    case ShareOfPropertyPage(index)      => _ => routes.CheckPropertyController.onPageLoad(index)
+    case CheckPropertyPage(_)            => _ => routes.AddPropertyController.onPageLoad(NormalMode)
+    case AddPropertyPage                 => addPropertyRoute
+    case RemovePropertyPage(_)           => removePropertyRoute
+    case _                               => _ => routes.IndexController.onPageLoad
   }
 
   private def applicantHasUtrRoute(answers: UserAnswers): Call =
@@ -53,7 +55,13 @@ class Navigator @Inject()() {
   private def partnerHasUtrRoute(answers: UserAnswers): Call =
     answers.get(PartnerHasUtrPage).map {
       case true  => routes.PartnerUtrController.onPageLoad(NormalMode)
-      case false => routes.CurrentAddressController.onPageLoad(NormalMode)
+      case false => routes.CurrentAddressInUkController.onPageLoad(NormalMode)
+    }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
+
+  private def currentAddressInUkRoute(answers: UserAnswers): Call =
+    answers.get(CurrentAddressInUkPage).map {
+      case true  => routes.CurrentAddressUkController.onPageLoad(NormalMode)
+      case false => routes.CurrentAddressInternationalController.onPageLoad(NormalMode)
     }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
 
   private def addPropertyRoute(answers: UserAnswers): Call =
@@ -83,6 +91,7 @@ class Navigator @Inject()() {
     case PartnerHasUtrPage          => partnerHasUtrCheckRoute
     case PropertyAddressPage(index) => _ => routes.CheckPropertyController.onPageLoad(index)
     case ShareOfPropertyPage(index) => _ => routes.CheckPropertyController.onPageLoad(index)
+    case CurrentAddressInUkPage     => currentAddressInUkCheckRoute
     case _                          => _ => routes.CheckYourAnswersController.onPageLoad
   }
 
@@ -109,6 +118,19 @@ class Navigator @Inject()() {
         routes.CheckYourAnswersController.onPageLoad
     }
   }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
+
+  private def currentAddressInUkCheckRoute(answers: UserAnswers): Call =
+    answers.get(CurrentAddressInUkPage).map {
+      case true =>
+        answers.get(CurrentAddressUkPage)
+          .map(_ => routes.CheckYourAnswersController.onPageLoad)
+          .getOrElse(routes.CurrentAddressUkController.onPageLoad(CheckMode))
+
+      case false =>
+        answers.get(CurrentAddressInternationalPage)
+          .map(_ => routes.CheckYourAnswersController.onPageLoad)
+          .getOrElse(routes.CurrentAddressInternationalController.onPageLoad(CheckMode))
+    }.getOrElse(routes.JourneyRecoveryController.onPageLoad())
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>

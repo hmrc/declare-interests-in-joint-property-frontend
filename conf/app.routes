@@ -25,10 +25,10 @@ POST       /add-property                        controllers.AddPropertyControlle
 GET        /change-add-Property                  controllers.AddPropertyController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-add-Property                  controllers.AddPropertyController.onSubmit(mode: Mode = CheckMode)
 
-GET        /you-have-utr                        controllers.ApplicantHasUtrController.onPageLoad(mode: Mode = NormalMode)
-POST       /you-have-utr                        controllers.ApplicantHasUtrController.onSubmit(mode: Mode = NormalMode)
-GET        /change-you-have-Utr                  controllers.ApplicantHasUtrController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-you-have-Utr                  controllers.ApplicantHasUtrController.onSubmit(mode: Mode = CheckMode)
+GET        /you-have-unique-taxpayer-reference                         controllers.ApplicantHasUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /you-have-unique-taxpayer-reference                         controllers.ApplicantHasUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /change-you-have-unique-taxpayer-reference                  controllers.ApplicantHasUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-you-have-unique-taxpayer-reference                  controllers.ApplicantHasUtrController.onSubmit(mode: Mode = CheckMode)
 
 GET        /your-name                        controllers.ApplicantNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /your-name                        controllers.ApplicantNameController.onSubmit(mode: Mode = NormalMode)
@@ -45,10 +45,10 @@ POST       /your-unique-taxpayer-reference                        controllers.Ap
 GET        /change-your-unique-taxpayer-reference      controllers.ApplicantUtrController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-your-unique-taxpayer-reference      controllers.ApplicantUtrController.onSubmit(mode: Mode = CheckMode)
 
-GET        /current-address                        controllers.CurrentAddressController.onPageLoad(mode: Mode = NormalMode)
-POST       /current-address                        controllers.CurrentAddressController.onSubmit(mode: Mode = NormalMode)
-GET        /change-current-address                  controllers.CurrentAddressController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-current-address                  controllers.CurrentAddressController.onSubmit(mode: Mode = CheckMode)
+GET        /current-uk-address                        controllers.CurrentAddressUkController.onPageLoad(mode: Mode = NormalMode)
+POST       /current-uk-address                        controllers.CurrentAddressUkController.onSubmit(mode: Mode = NormalMode)
+GET        /change-current-uk-address                  controllers.CurrentAddressUkController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-current-uk-address                  controllers.CurrentAddressUkController.onSubmit(mode: Mode = CheckMode)
 
 GET        /partner-has-unique-taxpayer-reference                        controllers.PartnerHasUtrController.onPageLoad(mode: Mode = NormalMode)
 POST       /partner-has-unique-taxpayer-reference                        controllers.PartnerHasUtrController.onSubmit(mode: Mode = NormalMode)
@@ -90,3 +90,13 @@ POST        /check-property/:index                      controllers.CheckPropert
 
 GET        /print-form                         controllers.PrintController.onDownload
 GET        /next-steps                         controllers.PrintController.onPageLoad
+
+GET        /current-address-in-uk                        controllers.CurrentAddressInUkController.onPageLoad(mode: Mode = NormalMode)
+POST       /current-address-in-uk                        controllers.CurrentAddressInUkController.onSubmit(mode: Mode = NormalMode)
+GET        /change-current-address-in-uk                  controllers.CurrentAddressInUkController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-current-address-in-uk                  controllers.CurrentAddressInUkController.onSubmit(mode: Mode = CheckMode)
+
+GET        /current-international-address                        controllers.CurrentAddressInternationalController.onPageLoad(mode: Mode = NormalMode)
+POST       /current-international-address                        controllers.CurrentAddressInternationalController.onSubmit(mode: Mode = NormalMode)
+GET        /change-current-international-address                  controllers.CurrentAddressInternationalController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-current-international-address                  controllers.CurrentAddressInternationalController.onSubmit(mode: Mode = CheckMode)

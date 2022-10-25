@@ -17,65 +17,75 @@
 package controllers
 
 import base.SpecBase
-import forms.RemovePropertyFormProvider
-import models.{Index, NormalMode, UkAddress}
+import forms.CurrentAddressInUkFormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{PropertyAddressPage, ShareOfPropertyPage}
+import pages.CurrentAddressInUkPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import queries.PropertyQuery
 import repositories.SessionRepository
-import views.html.RemovePropertyView
+import views.html.CurrentAddressInUkView
 
 import scala.concurrent.Future
 
-class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
+class CurrentAddressInUkControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
-  val index = Index(0)
 
-  val formProvider = new RemovePropertyFormProvider()
+  val formProvider = new CurrentAddressInUkFormProvider()
   val form = formProvider()
-  val address = UkAddress("line1", None, "town", None, "postcode")
-  val share = 1
-  val baseAnswers =
-    emptyUserAnswers
-      .set(PropertyAddressPage(Index(0)), address).success.value
-      .set(ShareOfPropertyPage(Index(0)), share).success.value
 
-  lazy val removePropertyRoute = routes.RemovePropertyController.onPageLoad(NormalMode, index).url
+  lazy val currentAddressInUkRoute = routes.CurrentAddressInUkController.onPageLoad(NormalMode).url
 
-  "RemoveProperty Controller" - {
+  "CurrentAddressInUk Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, removePropertyRoute)
+        val request = FakeRequest(GET, currentAddressInUkRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[RemovePropertyView]
+        val view = application.injector.instanceOf[CurrentAddressInUkView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, index, address)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
-    "must remove the property and redirect to the next page when the answer is true" in {
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = UserAnswers(userAnswersId).set(CurrentAddressInUkPage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, currentAddressInUkRoute)
+
+        val view = application.injector.instanceOf[CurrentAddressInUkView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -84,62 +94,33 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, removePropertyRoute)
+          FakeRequest(POST, currentAddressInUkRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
-        val expectedAnswers = baseAnswers.remove(PropertyQuery(index)).success.value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
-        verify(mockSessionRepository, times(1)).set(eqTo(expectedAnswers))
-      }
-    }
-
-    "must not remove the property and redirect to the next page when the answer is false" in {
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val application =
-        applicationBuilder(userAnswers = Some(baseAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, removePropertyRoute)
-            .withFormUrlEncodedBody(("value", "false"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-        verify(mockSessionRepository, times(0)).set(any())
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, removePropertyRoute)
+          FakeRequest(POST, currentAddressInUkRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[RemovePropertyView]
+        val view = application.injector.instanceOf[CurrentAddressInUkView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, index, address)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -148,7 +129,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, removePropertyRoute)
+        val request = FakeRequest(GET, currentAddressInUkRoute)
 
         val result = route(application, request).value
 
@@ -163,7 +144,7 @@ class RemovePropertyControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, removePropertyRoute)
+          FakeRequest(POST, currentAddressInUkRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value

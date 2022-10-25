@@ -22,6 +22,12 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryCurrentAddressInternationalPage: Arbitrary[CurrentAddressInternationalPage.type] =
+    Arbitrary(CurrentAddressInternationalPage)
+
+  implicit lazy val arbitraryCurrentAddressInUkPage: Arbitrary[CurrentAddressInUkPage.type] =
+    Arbitrary(CurrentAddressInUkPage)
+
   implicit lazy val arbitraryShareOfPropertyPage: Arbitrary[ShareOfPropertyPage] =
     Arbitrary(ShareOfPropertyPage(Index(0)))
 
@@ -40,8 +46,8 @@ trait PageGenerators {
   implicit lazy val arbitraryPartnerHasUtrPage: Arbitrary[PartnerHasUtrPage.type] =
     Arbitrary(PartnerHasUtrPage)
 
-  implicit lazy val arbitraryCurrentAddressPage: Arbitrary[CurrentAddressPage.type] =
-    Arbitrary(CurrentAddressPage)
+  implicit lazy val arbitraryCurrentAddressPage: Arbitrary[CurrentAddressUkPage.type] =
+    Arbitrary(CurrentAddressUkPage)
 
   implicit lazy val arbitraryApplicantUtrPage: Arbitrary[ApplicantUtrPage.type] =
     Arbitrary(ApplicantUtrPage)

@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages
 
-package object govuk {
+import models.InternationalAddress
+import pages.behaviours.PageBehaviours
 
-  object all
-    extends ImplicitConversions
-      with BackLinkFluency
-      with ButtonFluency
-      with CheckboxFluency
-      with DateFluency
-      with ErrorSummaryFluency
-      with FieldsetFluency
-      with HintFluency
-      with InputFluency
-      with LabelFluency
-      with RadiosFluency
-      with SelectFluency
-      with SummaryListFluency
-      with TagFluency
+class CurrentAddressInternationalPageSpec extends PageBehaviours {
+
+  "CurrentAddressInternationalPage" - {
+
+    beRetrievable[InternationalAddress](CurrentAddressInternationalPage)
+
+    beSettable[InternationalAddress](CurrentAddressInternationalPage)
+
+    beRemovable[InternationalAddress](CurrentAddressInternationalPage)
+  }
 }

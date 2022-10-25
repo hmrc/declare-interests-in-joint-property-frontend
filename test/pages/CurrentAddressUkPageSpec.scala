@@ -16,12 +16,17 @@
 
 package pages
 
-import models.Address
-import play.api.libs.json.JsPath
+import models.{Address, UkAddress}
+import pages.behaviours.PageBehaviours
 
-case object CurrentAddressPage extends QuestionPage[Address] {
+class CurrentAddressUkPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "CurrentAddressPage" - {
 
-  override def toString: String = "currentAddress"
+    beRetrievable[UkAddress](CurrentAddressUkPage)
+
+    beSettable[UkAddress](CurrentAddressUkPage)
+
+    beRemovable[UkAddress](CurrentAddressUkPage)
+  }
 }

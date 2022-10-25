@@ -18,10 +18,12 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
+import generators.ModelGenerators
+import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import models._
 
-class NavigatorSpec extends SpecBase {
+class NavigatorSpec extends SpecBase with ModelGenerators {
 
   val navigator = new Navigator
 
@@ -78,20 +80,37 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(PartnerHasUtrPage, NormalMode, answers) mustBe routes.PartnerUtrController.onPageLoad(NormalMode)
       }
 
-      "must go from Partner Has UTR to Current Address when the answer is no" in {
+      "must go from Partner Has UTR to Current Address in UK when the answer is no" in {
 
         val answers = emptyUserAnswers.set(PartnerHasUtrPage, false).success.value
-        navigator.nextPage(PartnerHasUtrPage, NormalMode, answers) mustBe routes.CurrentAddressController.onPageLoad(NormalMode)
+        navigator.nextPage(PartnerHasUtrPage, NormalMode, answers) mustBe routes.CurrentAddressInUkController.onPageLoad(NormalMode)
       }
 
-      "must go from Partner UTR to Current Address" in {
+      "must go from Partner UTR to Current Address in UK" in {
 
-        navigator.nextPage(PartnerUtrPage, NormalMode, emptyUserAnswers) mustBe routes.CurrentAddressController.onPageLoad(NormalMode)
+        navigator.nextPage(PartnerUtrPage, NormalMode, emptyUserAnswers) mustBe routes.CurrentAddressInUkController.onPageLoad(NormalMode)
       }
 
-      "must go from Current Address to Property Address for index 0" in {
+      "must go from Current Address in UK to Current UK address when the answer is yes" in {
 
-        navigator.nextPage(CurrentAddressPage, NormalMode, emptyUserAnswers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+        val answers = emptyUserAnswers.set(CurrentAddressInUkPage, true).success.value
+        navigator.nextPage(CurrentAddressInUkPage, NormalMode, answers) mustBe routes.CurrentAddressUkController.onPageLoad(NormalMode)
+      }
+
+      "must go from Current Address in UK to Current International address when the answer is no" in {
+
+        val answers = emptyUserAnswers.set(CurrentAddressInUkPage, false).success.value
+        navigator.nextPage(CurrentAddressInUkPage, NormalMode, answers) mustBe routes.CurrentAddressInternationalController.onPageLoad(NormalMode)
+      }
+
+      "must go from Current Address Uk to Property Address for index 0" in {
+
+        navigator.nextPage(CurrentAddressUkPage, NormalMode, emptyUserAnswers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
+      }
+
+      "must go from Current Address International to Property Address for index 0" in {
+
+        navigator.nextPage(CurrentAddressInternationalPage, NormalMode, emptyUserAnswers) mustBe routes.PropertyAddressController.onPageLoad(NormalMode, Index(0))
       }
 
       "must go from Property Address to Share of Property for the same index" in {
@@ -114,7 +133,7 @@ class NavigatorSpec extends SpecBase {
 
       "must go from Add Property to Property Address for the next index when the answer is yes" in {
 
-        val address = Address("line 1", None, "town", None, "postcode")
+        val address = UkAddress("line 1", None, "town", None, "postcode")
         val answers =
           emptyUserAnswers
             .set(PropertyAddressPage(Index(0)), address).success.value
@@ -132,7 +151,7 @@ class NavigatorSpec extends SpecBase {
 
       "must go from Remove Property to Add Property when there is at least one property left" in {
 
-        val address = Address("line 1", None, "town", None, "postcode")
+        val address = UkAddress("line 1", None, "town", None, "postcode")
         val answers =
           emptyUserAnswers
             .set(PropertyAddressPage(Index(0)), address).success.value
@@ -229,9 +248,49 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(PartnerUtrPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
       }
 
-      "must go from Current Address to Check Answers" in {
+      "must go from Current Address in UK" - {
 
-        navigator.nextPage(CurrentAddressPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+        "to Current UK Address when the answer is yes and a UK address has not already been answered" in {
+
+          val answers = emptyUserAnswers.set(CurrentAddressInUkPage, true).success.value
+          navigator.nextPage(CurrentAddressInUkPage, CheckMode, answers) mustBe routes.CurrentAddressUkController.onPageLoad(CheckMode)
+        }
+
+        "to Check Answers when the answer is yes and a UK address has already been answered" in {
+
+          val answers =
+            emptyUserAnswers
+              .set(CurrentAddressInUkPage, true).success.value
+              .set(CurrentAddressUkPage, arbitrary[UkAddress].sample.value).success.value
+
+          navigator.nextPage(CurrentAddressInUkPage, CheckMode, answers) mustBe routes.CheckYourAnswersController.onPageLoad
+        }
+
+        "to Current International Address when the answer is no and an international address has not already been answered" in {
+
+          val answers = emptyUserAnswers.set(CurrentAddressInUkPage, false).success.value
+          navigator.nextPage(CurrentAddressInUkPage, CheckMode, answers) mustBe routes.CurrentAddressInternationalController.onPageLoad(CheckMode)
+        }
+
+        "to Check Answers when the answer is no and an international address has already been answered" in {
+
+          val answers =
+            emptyUserAnswers
+              .set(CurrentAddressInUkPage, false).success.value
+              .set(CurrentAddressInternationalPage, arbitrary[InternationalAddress].sample.value).success.value
+
+          navigator.nextPage(CurrentAddressInUkPage, CheckMode, answers) mustBe routes.CheckYourAnswersController.onPageLoad
+        }
+      }
+
+      "must go from Current UK Address to Check Answers" in {
+
+        navigator.nextPage(CurrentAddressUkPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
+
+      "must go from Current International Address to Check Answers" in {
+
+        navigator.nextPage(CurrentAddressInternationalPage, CheckMode, emptyUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
       }
 
       "must go from Property Address to Check Property" in {
